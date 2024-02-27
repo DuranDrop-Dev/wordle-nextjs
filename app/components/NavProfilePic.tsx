@@ -1,4 +1,4 @@
-import { auth } from "../../utils/Firebase";
+import { auth } from "../utils/Firebase";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -14,7 +14,7 @@ const NavProfilePic = () => {
 
     if (loading) return (
         <Image
-            className="navProfile"
+            className="rounded-full w-15 h-15"
             src={profile}
             alt=""
         />)
@@ -23,7 +23,7 @@ const NavProfilePic = () => {
         <>
             {!user.photoURL &&
                 <Image
-                    className="navProfile"
+                    className="rounded-full w-15 h-15"
                     onClick={handleLoginClick}
                     src={profile}
                     alt="profile"
@@ -33,7 +33,7 @@ const NavProfilePic = () => {
             }
             {user.photoURL &&
                 <Image
-                    className="navProfile"
+                    className="rounded-full w-15 h-15 m-2"
                     onClick={handleLoginClick}
                     src={user.photoURL}
                     alt="photoURL"
@@ -47,7 +47,7 @@ const NavProfilePic = () => {
     if (!user) return (
         <>
             <Image
-                className="navProfile"
+                className="rounded-full w-15 h-15"
                 onClick={handleLoginClick}
                 src={profile}
                 alt="profile"

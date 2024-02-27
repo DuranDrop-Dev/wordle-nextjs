@@ -93,9 +93,13 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
         <>
             {showEmail &&
                 <>
-                    <h3>Login with Email</h3>
+                    <h3 className='text-xl bold-font'>Login with Email</h3>
                     <button
-                        className="read-more-button"
+                        className="p-1 pl-3 pr-3 
+                        bg-white text-black border-2 border-white
+                        rounded-3xl font-bold  
+                        hover:bg-black hover:text-white 
+                        transition-all ease-in-out"
                         disabled={!isChecked}
                         onClick={showEmailForms}>
                         Email
@@ -106,11 +110,10 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
                 <>
                     {toggleLoginSignup &&
                         <>
-                            <h3>Login with Email</h3>
+                            <h3 className='text-xl bold-font'>Login with Email</h3>
                             <form
-                                className='myForm'
-                                onSubmit={handleLoginBtn}
-                            >
+                                className='flex flex-col items-center gap-3 rounded-3xl p-4'
+                                onSubmit={handleLoginBtn}>
                                 <div className='inputContainer'>
                                     <label htmlFor="email">Email:</label>
                                     <input
@@ -134,12 +137,16 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
                                     />
                                 </div>
                                 <button
-                                    className="read-more-button"
+                                    className="p-1 pl-3 pr-3 
+                                    bg-white text-black border-2 border-white
+                                    rounded-3xl font-bold  
+                                    hover:bg-black hover:text-white 
+                                    transition-all ease-in-out"
                                     type="submit">
                                     Login
                                 </button>
                                 <button
-                                    className='textBtn'
+                                    className='p-1 pl-3 pr-3 text-purple-700'
                                     onClick={showLoginSignup}>
                                     Create an account
                                 </button>
@@ -149,9 +156,9 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
 
                     {!toggleLoginSignup &&
                         <>
-                            <h3>Create an Account</h3>
+                            <h3 className='text-xl bold-font'>Create an Account</h3>
                             <form
-                                className='myForm'
+                                className='flex flex-col items-center gap-3 rounded-3xl p-4'
                                 onSubmit={handleSignUpBtn}
                             >
                                 <div className='inputContainer'>
@@ -177,12 +184,16 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
                                     />
                                 </div>
                                 <button
-                                    className="read-more-button"
+                                    className="p-1 pl-3 pr-3 
+                                    bg-white text-black border-2 border-white
+                                    rounded-3xl font-bold  
+                                    hover:bg-black hover:text-white 
+                                    transition-all ease-in-out"
                                     type="submit">
                                     SignUp
                                 </button>
                                 <button
-                                    className='textBtn'
+                                    className='p-1 pl-3 pr-3 text-purple-700'
                                     onClick={showLoginSignup}>
                                     Back to login
                                 </button>

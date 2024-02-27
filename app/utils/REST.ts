@@ -1,14 +1,13 @@
-import axios from "axios";
-import { NextResponse } from "next/server";
-
 export type UserRequestBody = {
     _id: string;
     email: string;
     userUID: string;
     admin: boolean;
 }
-
-export const getMongoAdmin = async ({ userUID }: UserRequestBody) => {
+type UserBody = {
+    userUID: string;
+}
+export const getMongoAdmin = async ({ userUID }: UserBody) => {
     try {
         const response = await fetch(`/api/user/${userUID}`, {
             method: 'GET',

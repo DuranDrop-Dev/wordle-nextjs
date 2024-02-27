@@ -1,9 +1,10 @@
+"use client"
+
 import { useState, useEffect } from 'react';
-import { getMongoAdmin } from '../../utils/REST';
+import { getMongoAdmin } from '../utils/REST';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../../utils/Firebase';
+import { auth } from '../utils/Firebase';
 import { useRouter } from 'next/navigation';
-import './Menu.css';
 
 const Menu = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -21,14 +22,6 @@ const Menu = () => {
     const handleDashClick = () => {
         setIsOpen(!isOpen);
         router.push('/dashboard');
-    }
-    const handleContactClick = () => {
-        setIsOpen(!isOpen);
-        router.push('/contact');
-    }
-    const handleAboutClick = () => {
-        setIsOpen(!isOpen);
-        router.push('/about');
     }
 
     const handleLoginClick = () => {
@@ -60,19 +53,38 @@ const Menu = () => {
 
     return (
         <>
-            <div className="menuBtn" onClick={handleClick}>
-                <div className={isOpen ? 'menuBar1Opened' : 'menuBar1'} />
-                <div className={isOpen ? 'menuBar2Opened' : 'menuBar2'} />
-                <div className={isOpen ? 'menuBar3Opened' : 'menuBar3'} />
-            </div>
-            <div className={isOpen ? 'menuBoard' : 'close'}>
+            <button
+                id="toggleButton"
+                className="focus:outline-none w-14 h-14 relative"
+                onClick={handleClick}
+            >
+                <div className="flex flex-col items-center justify-center p-3.5 w-full h-full">
+                    <div
+                        className={`w-full h-1 rounded-sm bg-white mt-0 left-0 transition-transform duration-300 ${isOpen ? 'w-7 rotate-45 top-7 absolute' : ''
+                            }`}
+                        style={{ left: 14 }}
+                    ></div>
+                    <div
+                        className={`w-full h-1 rounded-sm bg-white mt-1.5 left-0 transition-transform duration-300 ${isOpen ? 'opacity-0' : ''
+                            }`}
+                        style={{ top: '50%' }}
+                    ></div>
+                    <div
+                        className={`w-full h-1 rounded-sm bg-white mt-1.5 left-0 transition-transform duration-300 ${isOpen ? 'w-7 -rotate-45 absolute' : ''
+                            }`}
+                        style={{ top: 22, bottom: 0, left: 14 }}
+                    ></div>
+                </div>
+            </button>
+
+            <div className={`absolute flex flex-col h-0 top-14 w-full z-50 transition-transform transform ${isOpen ? 'scale-y-100' : 'scale-y-0'}`}>
                 <ul>
-                    <li className={isOpen ? 'separator' : 'separator-close'} />
+                    <li className='w-full border-b border-gray-800' />
                 </ul>
                 <ul>
                     <li
                         onClick={handleHomeClick}
-                        className={isOpen ? 'liItem' : 'closeItem'}>
+                        className='w-full py-2 px-0 font-bold text-white bg-gray-950 border-b border-gray-800 pl-2 hover: cursor-pointer'>
                         Home
                     </li>
                 </ul>
@@ -80,35 +92,21 @@ const Menu = () => {
                     <ul>
                         <li
                             onClick={handleDashClick}
-                            className={isOpen ? 'liItem' : 'closeItem'}>
+                            className='w-full py-2 px-0 font-bold text-white bg-gray-950 border-b border-gray-800 pl-2 hover: cursor-pointer'>
                             DashBoard
                         </li>
                     </ul>
                 )}
                 <ul>
                     <li
-                        onClick={handleContactClick}
-                        className={isOpen ? 'liItem' : 'closeItem'}>
-                        Contact
-                    </li>
-                </ul>
-                <ul>
-                    <li
-                        onClick={handleAboutClick}
-                        className={isOpen ? 'liItem' : 'closeItem'}>
-                        About
-                    </li>
-                </ul>
-                <ul>
-                    <li
                         onClick={handleLoginClick}
-                        className={isOpen ? 'liItem' : 'closeItem'}>
+                        className='w-full py-2 px-0 font-bold text-white bg-gray-950 border-b border-gray-800 pl-2 hover: cursor-pointer'>
                         Login
                     </li>
                 </ul>
                 <ul>
                     <li
-                        className={isOpen ? 'emptySpace' : 'close'}
+                        className='w-full h-screen py-2 px-0 font-bold text-white bg-nav'
                         onClick={handleClick}>
                     </li>
                 </ul>

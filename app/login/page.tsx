@@ -9,10 +9,8 @@ import { getMongoAdmin } from "../utils/REST";
 import Link from "next/link";
 import Image from "next/image";
 import placeholder from "@icons/profilePlaceholder.svg";
-import PostWall from "../components/PostWall/PostWall";
-import EmailForm from "../components/EmailForm/EmailForm";
-
-import "./loginStyle.css";
+import PostWall from "../components/PostWall";
+import EmailForm from "../components/EmailForm";
 
 const Login = () => {
     const [isChecked, setIsChecked] = useState(false);
@@ -84,21 +82,21 @@ const Login = () => {
     }, [user, setIsAdmin]);
 
     if (loading || error) return (
-        <div className="login-page">
-            <div className="login-container">
-                <PostWall image="https://res.cloudinary.com/dykcimfhh/image/upload/v1708840723/unbroken-assets/images/login_dcmzfg.jpg" title="" style="fade" />
+        <div className="flex max-w-screen-md mx-auto h-screen flex-col items-center mt-{60px}">
+            <div className="flex flex-col items-center justify-center gap-1 m-3">
+                <PostWall image="https://res.cloudinary.com/dykcimfhh/image/upload/v1709005064/unbroken-assets/images/dcpjw3xzxeackkuhpxl0.jpg" title="" style="fade" />
                 <h1>loading...</h1>
             </div>
         </div>
     );
 
     if (!user) return (
-        <div className="login-container">
-            <PostWall image="https://res.cloudinary.com/dykcimfhh/image/upload/v1708840723/unbroken-assets/images/login_dcmzfg.jpg" title="" style="fade" />
-            <h1>Login</h1>
-            <div className="login-card">
+        <div className="flex max-w-screen-md mx-auto h-screen flex-col items-center mt-{60px}">
+            <PostWall image="https://res.cloudinary.com/dykcimfhh/image/upload/v1709005064/unbroken-assets/images/dcpjw3xzxeackkuhpxl0.jpg" title="" style="fade" />
+            <h1 className="font-bold text-3xl m-6">Login</h1>
+            <div className="flex flex-col items-center gap-5 m-3 bg-gray-950 p-8 rounded-md">
                 <br />
-                <label className="labelContainer">
+                <label>
                     <div>
                         <input
                             checked={isChecked}
@@ -107,20 +105,20 @@ const Login = () => {
                             id="myCheckbox"
                         />
                         <i>*by checking this box you agree to the{" "}
-                            <Link href="/terms">
-                                <i><b>Terms & Conditions</b></i>
-                            </Link>{" "}
+                            <Link href="/terms"><i><b>Terms & Conditions</b></i></Link>{" "}
                             and{" "}
-                            <Link href="/privacy-policy">
-                                <i><b>Privacy Policy</b></i>
-                            </Link>
+                            <Link href="/privacy-policy"><i><b>Privacy Policy</b></i></Link>
                         </i>
                     </div>
                 </label>
                 <br />
-                <h3>Login/Sign in with Google</h3>
+                <h3 className="text-xl bold-font">Login/Sign in with Google</h3>
                 <button
-                    className="read-more-button"
+                    className="p-1 pl-3 pr-3 
+                    bg-white text-black border-2 border-white
+                    rounded-3xl font-bold  
+                    hover:bg-black hover:text-white 
+                    transition-all ease-in-out"
                     disabled={!isChecked}
                     id="loginBtn"
                     onClick={GoogleLogin}
@@ -134,13 +132,13 @@ const Login = () => {
     )
 
     if (user) return (
-        <div className="login-container">
-            <PostWall image="https://res.cloudinary.com/dykcimfhh/image/upload/v1708840723/unbroken-assets/images/login_dcmzfg.jpg" title="" style="fade" />
-            <h1>Sign Out</h1>
-            <div className="login-card">
+        <div className="flex max-w-screen-md mt-{60px} mx-auto h-screen flex-col items-center text-center">
+            <PostWall image="https://res.cloudinary.com/dykcimfhh/image/upload/v1709005064/unbroken-assets/images/dcpjw3xzxeackkuhpxl0.jpg" title="" style="fade" />
+            <h1 className="font-bold text-3xl m-6">Sign Out</h1>
+            <div className="flex flex-col items-center gap-5 m-3 bg-gray-950 p-8 rounded-md">
                 {user.photoURL &&
                     <Image
-                        className="user-photo"
+                        className="rounded-full user-photo"
                         src={user.photoURL}
                         alt="userPhoto"
                         width={80}
@@ -149,31 +147,45 @@ const Login = () => {
                 }
                 {!user.photoURL &&
                     <Image
-                        className="user-photo"
+                        className="rounded-full user-photo"
                         src={placeholder}
                         alt="userPhoto"
                         width={80}
                         height={80}
                     />
                 }
-                <h3>Welcome, {displayUserName}</h3>
+                <h3 className="text-xl bold-font">
+                    Welcome, {displayUserName}
+                </h3>
                 <button
-                    className="read-more-button"
+                    className="p-1 pl-3 pr-3 
+                    bg-white text-black border-2 border-white
+                    rounded-3xl font-bold  
+                    hover:bg-black hover:text-white 
+                    transition-all ease-in-out"
                     onClick={Logout}>
                     Logout
                 </button>
 
-                <div className="user-logged-buttons">
-                    <h3>What Now:</h3>
-                    <div style={{ display: "flex" }}>
+                <div className="flex flex-col items-center">
+                    <h3 className="text-xl bold-font m-3">What Now:</h3>
+                    <div className="flex flex-row items-center gap-3">
                         <button
-                            className="read-more-button"
+                            className="p-1 pl-3 pr-3 
+                            bg-white text-black border-2 border-white
+                            rounded-3xl font-bold  
+                            hover:bg-black hover:text-white 
+                            transition-all ease-in-out"
                             onClick={() => router.push("/")}>
                             Home
                         </button>
                         {isAdmin &&
                             <button
-                                className="read-more-button"
+                                className="p-1 pl-3 pr-3 
+                                bg-white text-black border-2 border-white
+                                rounded-3xl font-bold  
+                                hover:bg-black hover:text-white 
+                                transition-all ease-in-out"
                                 onClick={() => router.push("/dashboard")}>
                                 Dashboard
                             </button>
