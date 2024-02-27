@@ -1,0 +1,87 @@
+/* Normal effect */
+.post-wall-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.post-wall-title {
+    position: absolute;
+    left: 20px;
+    bottom: -15px;
+
+    color: white;
+    font-weight: bold;
+    font-family: "Righteous";
+    font-size: 40px;
+    text-shadow: 0px 1px 1px var(--box_shadow);
+}
+
+.post-wall-img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    scale: 1;
+    opacity: 1;
+    box-shadow: 0px 4px 4px var(--box_shadow);
+    animation: scale linear forwards;
+    animation-timeline: view();
+    animation-range: entry;
+}
+
+/* Fade effect */
+.post-wall-container-fade {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+.post-wall-container-fade::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 101%;
+    background: linear-gradient(to bottom, transparent 45%, var(--second_card) 95%);
+    z-index: 10;
+}
+
+.post-wall-img-fade {
+    width: 100%;
+    height: auto;
+    border-radius: 0px;
+    scale: 1;
+    opacity: 1;
+    animation: scale linear forwards;
+    animation-timeline: view();
+    animation-range: entry;
+}
+
+@keyframes scale {
+    from {
+        scale: .8;
+        opacity: 0;
+    }
+
+    to {
+        scale: 1;
+        opacity: 1;
+    }
+}
+
+@media (orientation: portrait) {
+    .post-wall-title {
+        text-align: center;
+        font-size: calc(5vw + 2px);
+        bottom: 0px;
+    }
+    .post-wall-container-fade {
+        margin: -10px;
+    }
+}
