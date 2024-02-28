@@ -88,15 +88,7 @@ const Menu = () => {
                         Home
                     </li>
                 </ul>
-                {isAdmin && (
-                    <ul>
-                        <li
-                            onClick={handleDashClick}
-                            className='w-full py-2 px-0 font-bold text-white bg-gray-950 border-b border-gray-800 pl-2 hover: cursor-pointer'>
-                            DashBoard
-                        </li>
-                    </ul>
-                )}
+                
                 <ul>
                     <li
                         onClick={handleLoginClick}

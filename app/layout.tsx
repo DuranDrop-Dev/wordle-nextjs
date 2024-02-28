@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className + "flex h-screen bg-gradient-to-b from-black to-gray-950"}>
+      <body className={inter.className}>
         <Navigation />
         {children}
       </body>

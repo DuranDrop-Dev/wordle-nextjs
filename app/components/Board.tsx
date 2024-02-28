@@ -618,7 +618,7 @@ const Board = () => {
                 <div className="flex max-w-screen-md mx-auto flex-col justify-center items-center">
                     {Array.from({ length: BOARD_ROWS }).map((_, rowIndex) => (
                         <div
-                            className={isBoardSelected(rowIndex + 1) ? "flex flex-row border border-slate-400" : "flex flex-row"}
+                            className={isBoardSelected(rowIndex + 1) ? "flex flex-row border border-slate-400" : "flex flex-initial"}
                             id={`row-${rowIndex + 1}`}
                             key={`row-${rowIndex + 1}`}
                         >
@@ -632,21 +632,22 @@ const Board = () => {
                                         className={
                                             isLetterGreen(rowIndex + 1, cellIndex + 1)
                                                 ? `text-xl font-bold text-center m-1 rounded-md
-                                               text-white bg-green-500 border border-gray-700 
-                                                 flex items-center justify-center capitalize 
-                                                 sm:w-20 sm:h-20 w-16 h-16 transition-all ease-in-out 
-                                                 disabled:opacity-90 disabled:cursor-not-allowed`
+                                           text-white bg-green-500 border border-gray-700 
+                                           flex items-center justify-center capitalize 
+                                           sm:w-20 sm:h-20 w-16 h-16 transition-all ease-in-out 
+                                           disabled:opacity-90 disabled:cursor-not-allowed`
                                                 : isLetterYellow(rowIndex + 1, cellIndex + 1)
                                                     ? `text-xl font-bold text-center m-1 rounded-md 
-                                                    text-white bg-yellow-500 border border-gray-700 
-                                                    flex items-center justify-center capitalize 
-                                                    sm:w-20 sm:h-20 w-16 h-16 transition-all ease-in-out 
-                                                    disabled:opacity-90 disabled:cursor-not-allowed`
-                                                    : `text-xl font-bold text-center m-1 rounded-md 
-                                                    text-white bg-gray-900 border border-gray-700 
-                                                    flex items-center justify-center capitalize 
-                                                    sm:w-20 sm:h-20 w-16 h-16 transition-all ease-in-out 
-                                                    disabled:opacity-90 disabled:cursor-not-allowed focus:border-green-200 selection:border-green-200`
+                                            text-white bg-yellow-500 border border-gray-700 
+                                            flex items-center justify-center capitalize 
+                                            sm:w-20 sm:h-20 w-16 h-16 transition-all ease-in-out 
+                                            disabled:opacity-90 disabled:cursor-not-allowed`
+                                                    : `sm:w-20 sm:h-20 w-16 h-16 text-xl font-bold text-center m-1 rounded-md 
+                                            text-white bg-gray-900 border border-gray-700 
+                                            items-center justify-center capitalize 
+                                            transition-all ease-in-out 
+                                            disabled:opacity-90 disabled:cursor-not-allowed 
+                                            focus:border-green-200 selection:border-green-200`
                                         }
                                         onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => handleKeyDown(event, rowIndex + 1, cellIndex + 1)}
                                         disabled={isRowDisabled(rowIndex + 1)}
@@ -675,6 +676,7 @@ const Board = () => {
                 </div>
             }
         </div>
+
     )
 }
 
