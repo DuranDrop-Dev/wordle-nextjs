@@ -5,7 +5,7 @@ import { isStarted, rowTurn, wordle, userGuess, inputValues } from '../utils/Sig
 import { InputValues, UserPayload, Word } from '../utils/Types';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../utils/Firebase';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 const Board = () => {
     const CELL_PER_ROW = 5;
@@ -15,6 +15,7 @@ const Board = () => {
     const [start, setStart] = useState(isStarted.value);
     const [stateInputValues, setStateInputValues] = useState(inputValues.value);
     const [stateRowTurn, setStateRowTurn] = useState(rowTurn.value);
+    const [nextCellString, setNextCellString] = useState("");
 
     const [user] = useAuthState(auth);
     const emailUser = user?.email;
@@ -189,6 +190,19 @@ const Board = () => {
         if (cellName) {
             cellName.select();
             cellName.focus();
+
+            if (!nextCellString) {
+                // Handle case where nextCellId is not found
+                console.error("Next cell element not found");
+                return;
+            }
+    
+            const nextCellInput = document.getElementById(nextCellString) as HTMLInputElement;
+    
+            setTimeout(() => {
+                nextCellInput.select();
+                nextCellInput.focus();
+            }, 50);
         }
     }
 
@@ -348,6 +362,7 @@ const Board = () => {
         })(inputValues.value);
 
         setStateInputValues(inputValues.value);
+        setNextCellString(`cell-${(row - 1) * 5 + cell + 1}`);
 
         setTimeout(() => {
             handleNextCellFocus(event);
@@ -477,10 +492,10 @@ const Board = () => {
                                         autoComplete="off"
                                         className={
                                             isLetterGreen(rowIndex + 1, cellIndex + 1)
-                                                ? "text-xl font-bold text-center m-1 rounded-md text-white bg-green-500 border border-gray-700 flex items-center justify-center capitalize sm:w-20 sm:h-20 w-14 h-14 transition-all ease-in-out"
+                                                ? "text-xl font-bold text-center m-1 rounded-md text-white bg-green-500 border border-gray-700 flex items-center justify-center capitalize sm:w-20 sm:h-20 w-14 h-14 transition-all ease-in-out disabled:opacity-90 disabled:cursor-not-allowed"
                                                 : isLetterYellow(rowIndex + 1, cellIndex + 1)
-                                                    ? "text-xl font-bold text-center m-1 rounded-md text-white bg-yellow-500 border border-gray-700 flex items-center justify-center capitalize sm:w-20 sm:h-20 w-14 h-14 transition-all ease-in-out"
-                                                    : "text-xl font-bold text-center m-1 rounded-md text-white bg-gray-800 border border-gray-700 flex items-center justify-center capitalize sm:w-20 sm:h-20 w-14 h-14 transition-all ease-in-out"
+                                                    ? "text-xl font-bold text-center m-1 rounded-md text-white bg-yellow-500 border border-gray-700 flex items-center justify-center capitalize sm:w-20 sm:h-20 w-14 h-14 transition-all ease-in-out disabled:opacity-90 disabled:cursor-not-allowed"
+                                                    : "text-xl font-bold text-center m-1 rounded-md text-white bg-gray-800 border border-gray-700 flex items-center justify-center capitalize sm:w-20 sm:h-20 w-14 h-14 transition-all ease-in-out disabled:opacity-90 disabled:cursor-not-allowed"
                                         }
                                         onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => handleKeyDown(event, rowIndex + 1, cellIndex + 1)}
                                         disabled={isRowDisabled(rowIndex + 1)}
@@ -488,10 +503,10 @@ const Board = () => {
                                         id={cellKey}
                                         key={cellKey}
                                         value={stateInputValues[cellKey].value}
-                                        onClick={(event: React.MouseEvent<HTMLInputElement>) => {
+                                        onChange={(event: ChangeEvent<HTMLInputElement>) => {
                                             const target = event.target as HTMLInputElement;
                                             target?.select();
-                                        }}
+                                        }}                                        
                                     />
                                 );
                             })}
