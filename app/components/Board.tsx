@@ -14,7 +14,6 @@ const Board = () => {
 
     const [start, setStart] = useState(isStarted.value);
     const [stateInputValues, setStateInputValues] = useState(inputValues.value);
-    const [stateRowTurn, setStateRowTurn] = useState(rowTurn.value);
     const [nextCellString, setNextCellString] = useState("");
 
     const [user] = useAuthState(auth);
@@ -133,41 +132,87 @@ const Board = () => {
         'write', 'wrong'
     ];
 
+    const unwantedKeys = [
+        'CapsLock', 'Shift', 'Control', 'Alt', 'Tab', 'Space', 'ArrowLeft', 'ArrowRight',
+        'ArrowUp', 'ArrowDown', 'Insert', 'Home', 'Delete', 'End', 'PageUp', 'PageDown',
+        'NumLock', 'Pause', 'ScrollLock', 'Meta', 'AltGraph', 'ContextMenu', 'AltGraph',
+        'Dead', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12',
+        'Escape', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.', ',', ';', ':',
+        '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '{', '}', '[', ']',
+        '|', '-', '+', '<', '>', '?', '/', '`', '~', '=', "'", '"', "|", "\\", 'Clear'
+    ];
+
+    /**
+     * Set the input values to the default values and start the game
+     */
     const handleStart = () => {
+        // Set the input values to the default values
         inputValues.value = generateInputValues();
         setStateInputValues(inputValues.value);
 
+        // Randomize the wordle
         randomizeWordle();
 
+        // Start row turn
         rowTurn.value = 1;
-        setStateRowTurn(rowTurn.value);
 
+        // Switch to started state
         isStarted.value = true;
         setStart(true);
 
+        // Focus the first cell
         setTimeout(() => {
             handleFirstCellFocus();
         }, 50);
     }
 
-    const generateInputValues = (): { [key: string]: { value: string; green: boolean; yellow: boolean } } => {
+    /**
+     * Generates input values.
+     *
+     * @return {{[key: string]: { value: string; green: boolean; yellow: boolean }}} the generated input values
+     */
+    const generateInputValues = (): {
+        [key: string]: {
+            value: string;
+            green: boolean;
+            yellow: boolean
+        }
+    } => {
+        // Generate input values
         const newObject: { [key: string]: { value: string; green: boolean; yellow: boolean } } = {};
+
+        // Loop through each cell
         for (let i = 1; i <= BOARD_CELLS; i++) {
             newObject[`cell-${i}`] = { value: '', green: false, yellow: false };
         }
+
+        // Return the input values
         return newObject;
     };
 
+    /**
+     * Generate a random word from the wordleDictionary and assign it to the wordle value.
+     *
+     */
     const randomizeWordle = () => {
+        // Randomize number
         const randomIndex = Math.floor(Math.random() * wordleDictionary.length);
 
+        // Set the word with the random index
         const randomWord = wordleDictionary[randomIndex];
 
+        // Set the word as an array
         wordle.value = Array.from(randomWord);
 
+        // Log the wordle
         console.log(randomWord);
     }
 
+    /**
+     * Check if the user's guess is in the dictionary.
+     *
+     * @return {boolean} true if the word is in the dictionary, false otherwise
+     */
     const isWordInDictionary = () => {
         // Convert user guess to lowercase
         const lowerCaseWord = userGuess.value.join('').toLowerCase();
@@ -176,14 +221,29 @@ const Board = () => {
         return wordleDictionary.includes(lowerCaseWord);
     };
 
+    /**
+     * Check if the provided row is disabled.
+     *
+     * @param {number} row - the row to check
+     * @return {boolean} true if the row is disabled, false otherwise
+     */
     const isRowDisabled = (row: number) => {
         return row !== rowTurn.value;
     };
 
+    /**
+     * Checks if the specified row is selected.
+     *
+     * @param {number} row - the row to check
+     * @return {boolean} true if the row is selected, false otherwise
+     */
     const isBoardSelected = (row: number) => {
         return row === rowTurn.value;
     }
 
+    /**
+     * Function to handle focus on a new row.
+     */
     const handleNewRowFocus = () => {
         const cellName = document.getElementById(`cell-${rowTurn.value * 5 + 1}`) as HTMLInputElement | null;
 
@@ -196,9 +256,9 @@ const Board = () => {
                 console.error("Next cell element not found");
                 return;
             }
-    
+
             const nextCellInput = document.getElementById(nextCellString) as HTMLInputElement;
-    
+
             setTimeout(() => {
                 nextCellInput.select();
                 nextCellInput.focus();
@@ -206,6 +266,9 @@ const Board = () => {
         }
     }
 
+    /**
+     * Select the first cell and focus on it
+     */
     const handleFirstCellFocus = () => {
         // Select the first cell and focus on it
         const firstCell = document.getElementById('cell-1') as HTMLInputElement | null;
@@ -216,14 +279,33 @@ const Board = () => {
         }
     }
 
+    /**
+     * Check if the letter at the specified row and cell is green.
+     *
+     * @param {number} row - the row number
+     * @param {number} cell - the cell number
+     * @return {boolean} whether the letter is green
+     */
     const isLetterGreen = (row: number, cell: number): boolean => {
         return inputValues.value[`cell-${(row - 1) * 5 + cell}`].green;
     }
 
+    /**
+     * Check if the letter at the specified row and cell is yellow.
+     *
+     * @param {number} row - the row index
+     * @param {number} cell - the cell index
+     * @return {boolean} true if the letter is yellow, false otherwise
+     */
     const isLetterYellow = (row: number, cell: number): boolean => {
         return inputValues.value[`cell-${(row - 1) * 5 + cell}`].yellow;
     }
 
+    /**
+     * Removes old values from inputValues and updates the state.
+     *
+     * @return {void} 
+     */
     const removeOldValues = (): void => {
         // Manually clear input values
         const clearedInputValues: InputValues = Object.keys(inputValues.value).reduce((acc, key) => {
@@ -236,6 +318,12 @@ const Board = () => {
         setStateInputValues(clearedInputValues);
     };
 
+    /**
+     * Handles focusing on the next cell element when a keyboard event occurs.
+     *
+     * @param {React.KeyboardEvent<HTMLInputElement>} event - the keyboard event triggering the focus change
+     * @return {void} 
+     */
     const handleNextCellFocus = (event: React.KeyboardEvent<HTMLInputElement>): void => {
         const currentCellId: string | null = (event.target as HTMLElement).id;
 
@@ -259,6 +347,13 @@ const Board = () => {
         nextCellInput.select();
     }
 
+    /**
+     * A function to handle the backspace key press event and update user guess accordingly.
+     *
+     * @param {React.KeyboardEvent<HTMLInputElement>} event - the keyboard event object
+     * @param {string} keyValue - the value of the key pressed
+     * @return {boolean} true if the default behavior is prevented, otherwise false
+     */
     const backSpaceFunction = (event: React.KeyboardEvent<HTMLInputElement>, keyValue: string): boolean => {
         if (keyValue === 'Backspace') {
             // Prevent the default behavior of the backspace key
@@ -299,6 +394,13 @@ const Board = () => {
         return false;
     }
 
+    /**
+     * A function that handles the "Enter" key press event.
+     *
+     * @param {React.KeyboardEvent<HTMLInputElement>} event - the keyboard event
+     * @param {string} keyValue - the value of the key being pressed
+     * @return {boolean} true if the "Enter" key was pressed, otherwise undefined
+     */
     const enterFunction = (event: React.KeyboardEvent<HTMLInputElement>, keyValue: string) => {
         if (keyValue === 'Enter') {
             // Prevent the default behavior of the enter key
@@ -312,16 +414,13 @@ const Board = () => {
         }
     }
 
-    const unwantedKeys = [
-        'CapsLock', 'Shift', 'Control', 'Alt', 'Tab', 'Space', 'ArrowLeft', 'ArrowRight',
-        'ArrowUp', 'ArrowDown', 'Insert', 'Home', 'Delete', 'End', 'PageUp', 'PageDown',
-        'NumLock', 'Pause', 'ScrollLock', 'Meta', 'AltGraph', 'ContextMenu', 'AltGraph',
-        'Dead', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12',
-        'Escape', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.', ',', ';', ':',
-        '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '{', '}', '[', ']',
-        '|', '-', '+', '<', '>', '?', '/', '`', '~', '=', "'", '"', "|", "\\", 'Clear'
-    ];
-
+    /**
+     * Checks if the key value is in the unwantedKeys array and prevents the default event if it is.
+     *
+     * @param {React.KeyboardEvent<HTMLInputElement>} event - the keyboard event
+     * @param {string} keyValue - the value of the key pressed
+     * @return {boolean} true if the key is unwanted and the event was prevented, otherwise undefined
+     */
     const isUnwantedKey = (event: React.KeyboardEvent<HTMLInputElement>, keyValue: string) => {
         if (unwantedKeys.includes(keyValue)) {
             event.preventDefault();
@@ -329,6 +428,14 @@ const Board = () => {
         }
     };
 
+    /**
+     * Handle the key down event for the input element.
+     *
+     * @param {React.KeyboardEvent<HTMLInputElement>} event - The keyboard event
+     * @param {number} row - The row number
+     * @param {number} cell - The cell number
+     * @return {void} 
+     */
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>, row: number, cell: number) => {
         // Get the key value
         const keyValue = event.key;
@@ -369,6 +476,14 @@ const Board = () => {
         }, 50);
     }
 
+    /**
+     * Find the indexes of the characters in the word that are not in the greenIndexes array,
+     * and are present in the wordle.value.
+     *
+     * @param {string} word - the input word
+     * @param {number[]} greenIndexes - the indexes of green characters
+     * @return {number[]} the indexes of yellow characters
+     */
     const findYellowIndexes = (word: string, greenIndexes: number[]): number[] => {
         const allIndexes = Array.from({ length: word.length }, (_, index) => index);
 
@@ -386,6 +501,11 @@ const Board = () => {
         return yellowIndexes;
     };
 
+    /**
+     * Finds the indexes of characters that match in value and position between wordle and userGuess.
+     *
+     * @return {number[]} array of indexes of matching characters
+     */
     const findGreenIndexes = (): number[] => {
         const greenIndexes: number[] = [];
         for (let i = 0; i < wordle.value.length; i++) {
@@ -396,6 +516,11 @@ const Board = () => {
         return greenIndexes;
     }
 
+    /**
+     * Asynchronous function that calculates the user's game result and updates the user stats if an email is provided.
+     *
+     * @return {Promise<void>} 
+     */
     const userGameResult = async (): Promise<void> => {
         const userGuessString = userGuess.value.join('').toLowerCase();
         const wordleString = wordle.value.join('').toLowerCase();
@@ -415,22 +540,32 @@ const Board = () => {
 
     }
 
+    /**
+     * Handle the submission of the user's guess in the Wordle game. 
+     *
+     * @return {void} 
+     */
     const handleSubmit = (): void => {
+        // Check if the user's guess is valid
         if (userGuess.value.join('').length !== 5) {
             alert('Word must be 5 characters.');
             return;
         }
 
+        // Check if the user's guess is in the dictionary
         if (!isWordInDictionary()) {
             alert("Word is not in Worldle's dictionary. Spell check or try another word.");
             return;
         }
 
+        // Check if the user's guess is correct
         const greenIndexes = findGreenIndexes();
         const yellowIndexes = findYellowIndexes(userGuess.value.join(''), greenIndexes);
 
+        // Create new input values
         const newInputValues: InputValues = { ...inputValues.value };
 
+        // Update green and yellow input values
         greenIndexes.forEach((index) => {
             const cellIndex = (index + 1) + (CELL_PER_ROW * (rowTurn.value - 1));
             newInputValues[`cell-${cellIndex}`].green = true;
@@ -441,15 +576,16 @@ const Board = () => {
             newInputValues[`cell-${cellIndex}`].yellow = true;
         });
 
+        // Update input values
         inputValues.value = newInputValues;
         setStateInputValues(inputValues.value);
 
+        // Check if the user's guess is correct
         if (greenIndexes.length === wordle.value.length) {
             alert('You Win! The Wordle was: ' + wordle.value.join('').toUpperCase());
             userGameResult();
             removeOldValues();
             rowTurn.value = 1;
-            setStateRowTurn(rowTurn.value);
             userGuess.value = [];
             randomizeWordle();
             handleFirstCellFocus();
@@ -457,7 +593,6 @@ const Board = () => {
         } else {
             if (rowTurn.value < BOARD_ROWS) {
                 rowTurn.value = rowTurn.value + 1;
-                setStateRowTurn(rowTurn.value);
                 handleNewRowFocus();
                 userGuess.value = [];
             } else {
@@ -465,7 +600,6 @@ const Board = () => {
                 userGameResult();
                 removeOldValues();
                 rowTurn.value = 1;
-                setStateRowTurn(rowTurn.value);
                 userGuess.value = [];
                 randomizeWordle();
                 handleFirstCellFocus();
@@ -506,7 +640,7 @@ const Board = () => {
                                         onChange={(event: ChangeEvent<HTMLInputElement>) => {
                                             const target = event.target as HTMLInputElement;
                                             target?.select();
-                                        }}                                        
+                                        }}
                                     />
                                 );
                             })}
