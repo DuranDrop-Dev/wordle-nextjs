@@ -492,7 +492,6 @@ const Board = () => {
                                             const target = event.target as HTMLInputElement;
                                             target?.select();
                                         }}
-                                        readOnly
                                     />
                                 );
                             })}
