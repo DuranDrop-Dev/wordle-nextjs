@@ -2,6 +2,8 @@ import Board from "./components/Board";
 
 export default function Home() {
   return (
-    <Board />
+    <div className="">
+      <Board />
+    </div>
   );
 }

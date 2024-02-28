@@ -60,19 +60,19 @@ const Menu = () => {
             >
                 <div className="flex flex-col items-center justify-center p-3.5 w-full h-full">
                     <div
-                        className={`w-full h-1 rounded-sm bg-white mt-0 left-0 transition-transform duration-300 ${isOpen ? 'w-7 rotate-45 top-7 absolute' : ''
+                        className={`w-6 h-1 rounded-sm bg-white mt-0 left-0 transition-transform duration-300 ${isOpen ? 'w-6 rotate-45 absolute' : ''
                             }`}
-                        style={{ left: 14 }}
+                        style={{ top: 26, left: 16 }}
                     ></div>
                     <div
-                        className={`w-full h-1 rounded-sm bg-white mt-1.5 left-0 transition-transform duration-300 ${isOpen ? 'opacity-0' : ''
+                        className={`w-6 h-1 rounded-sm bg-white mt-1 left-0 transition-transform duration-300 ${isOpen ? 'opacity-0' : ''
                             }`}
                         style={{ top: '50%' }}
                     ></div>
                     <div
-                        className={`w-full h-1 rounded-sm bg-white mt-1.5 left-0 transition-transform duration-300 ${isOpen ? 'w-7 -rotate-45 absolute' : ''
+                        className={`w-6 h-1 rounded-sm bg-white mt-1 left-0 transition-transform duration-300 ${isOpen ? 'w-6 -rotate-45 absolute' : ''
                             }`}
-                        style={{ top: 22, bottom: 0, left: 14 }}
+                        style={{ top: 22, bottom: 0, left: 16 }}
                     ></div>
                 </div>
             </button>

@@ -11,6 +11,11 @@ const Board = () => {
     const CELL_PER_ROW = 5;
     const BOARD_ROWS = 6;
     const BOARD_CELLS = BOARD_ROWS * CELL_PER_ROW;
+    const btnString = `p-1 pl-3 pr-3 
+        bg-white text-black border-2 border-white
+        rounded-3xl font-bold m-3 
+        hover:bg-black hover:text-white 
+        transition-all ease-in-out`;
 
     const [start, setStart] = useState(isStarted.value);
     const [stateInputValues, setStateInputValues] = useState(inputValues.value);
@@ -608,12 +613,12 @@ const Board = () => {
     }
 
     return (
-        <div className='flex flex-col justify-center items-center'>
+        <div className='flex flex-col justify-center items-center mt-20'>
             {start &&
-                <div className="flex max-w-screen-md mx-auto flex-col items-center m-5 mt-{60px}">
+                <div className="flex max-w-screen-md mx-auto flex-col justify-center items-center">
                     {Array.from({ length: BOARD_ROWS }).map((_, rowIndex) => (
                         <div
-                            className={isBoardSelected(rowIndex + 1) ? "flex flex-row border border-white" : "flex flex-row"}
+                            className={isBoardSelected(rowIndex + 1) ? "flex flex-row border border-slate-400" : "flex flex-row"}
                             id={`row-${rowIndex + 1}`}
                             key={`row-${rowIndex + 1}`}
                         >
@@ -626,10 +631,22 @@ const Board = () => {
                                         autoComplete="off"
                                         className={
                                             isLetterGreen(rowIndex + 1, cellIndex + 1)
-                                                ? "text-xl font-bold text-center m-1 rounded-md text-white bg-green-500 border border-gray-700 flex items-center justify-center capitalize sm:w-20 sm:h-20 w-14 h-14 transition-all ease-in-out disabled:opacity-90 disabled:cursor-not-allowed"
+                                                ? `text-xl font-bold text-center m-1 rounded-md
+                                               text-white bg-green-500 border border-gray-700 
+                                                 flex items-center justify-center capitalize 
+                                                 sm:w-20 sm:h-20 w-16 h-16 transition-all ease-in-out 
+                                                 disabled:opacity-90 disabled:cursor-not-allowed`
                                                 : isLetterYellow(rowIndex + 1, cellIndex + 1)
-                                                    ? "text-xl font-bold text-center m-1 rounded-md text-white bg-yellow-500 border border-gray-700 flex items-center justify-center capitalize sm:w-20 sm:h-20 w-14 h-14 transition-all ease-in-out disabled:opacity-90 disabled:cursor-not-allowed"
-                                                    : "text-xl font-bold text-center m-1 rounded-md text-white bg-gray-800 border border-gray-700 flex items-center justify-center capitalize sm:w-20 sm:h-20 w-14 h-14 transition-all ease-in-out disabled:opacity-90 disabled:cursor-not-allowed"
+                                                    ? `text-xl font-bold text-center m-1 rounded-md 
+                                                    text-white bg-yellow-500 border border-gray-700 
+                                                    flex items-center justify-center capitalize 
+                                                    sm:w-20 sm:h-20 w-16 h-16 transition-all ease-in-out 
+                                                    disabled:opacity-90 disabled:cursor-not-allowed`
+                                                    : `text-xl font-bold text-center m-1 rounded-md 
+                                                    text-white bg-gray-900 border border-gray-700 
+                                                    flex items-center justify-center capitalize 
+                                                    sm:w-20 sm:h-20 w-16 h-16 transition-all ease-in-out 
+                                                    disabled:opacity-90 disabled:cursor-not-allowed focus:border-green-200 selection:border-green-200`
                                         }
                                         onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => handleKeyDown(event, rowIndex + 1, cellIndex + 1)}
                                         disabled={isRowDisabled(rowIndex + 1)}
@@ -647,21 +664,14 @@ const Board = () => {
                         </div>
                     ))}
 
-                    {start && <button className="p-1 pl-3 pr-3 
-                    bg-white text-black border-2 border-white
-                    rounded-3xl font-bold m-3 
-                    hover:bg-black hover:text-white 
-                    transition-all ease-in-out" onClick={handleSubmit}>Submit</button>}
+                    {start && <button className={btnString} onClick={handleSubmit}>Submit</button>}
                 </div>
             }
             {!start &&
-                <div className="flex flex-col items-center gap-5 m-3 bg-gray-950 p-8 rounded-md max-w-2xl">
+                <div className="flex flex-col items-center gap-5 m-3 bg-gray-950 border-2 border-slate-900 p-8 rounded-md max-w-2xl">
                     <h1 className="font-bold text-3xl text-center m-6">5 Letter Word Guessing Game</h1>
-                    <button className="p-1 pl-3 pr-3 
-                    bg-white text-black border-2 border-white
-                    rounded-3xl font-bold
-                    hover:bg-black hover:text-white 
-                    transition-all ease-in-out" onClick={handleStart}>Start</button>
+                    <button className={btnString} onClick={handleStart}>Play Now</button>
+                    <i className="text-center">*I am not the creator of this game, this is my interpretation of the game written in NextJS.</i>
                 </div>
             }
         </div>

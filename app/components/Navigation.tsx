@@ -7,7 +7,7 @@ import Link from "next/link";
 const Navigation = () => {
     return (
         <>
-            <div className="flex justify-between items-center h-15 bg-gray-950">
+            <div className="flex justify-between items-center h-15 bg-gray-950 border-b border-gray-800">
                 <Menu />
                 <Link className="text-2xl font-bold text-white" href="/">WORDLE</Link>
                 <NavProfilePic />
