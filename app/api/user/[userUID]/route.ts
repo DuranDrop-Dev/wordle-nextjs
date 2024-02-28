@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { dbConnect } from "../../../utils/MongoDB";
-import UserDB from "../../../models/User";
+import UserDB from "../../../utils/User";
 
 export async function GET(request: Request, { params }: { params: { userUID: string } }) {
     try {

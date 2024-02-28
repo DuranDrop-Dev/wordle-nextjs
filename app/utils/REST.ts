@@ -1,12 +1,5 @@
-export type UserRequestBody = {
-    _id: string;
-    email: string;
-    userUID: string;
-    admin: boolean;
-}
-type UserBody = {
-    userUID: string;
-}
+import { UserBody, UserRequestBody } from "./Types";
+
 export const getMongoAdmin = async ({ userUID }: UserBody) => {
     try {
         const response = await fetch(`/api/user/${userUID}`, {

@@ -64,14 +64,11 @@ const Login = () => {
             if (!user) return;
 
             try {
-                const adminData = await getMongoAdmin({ userUID: user.uid });
-
-                if (!adminData) {
+                if (user) {
+                    setIsAdmin(await getMongoAdmin({ userUID: user.uid }));
+                } else {
                     setIsAdmin(false);
-                    throw new Error('Failed to fetch admin data');
                 }
-
-                setIsAdmin(adminData);
             } catch (error) {
                 console.error('Error fetching admin data: ', error);
                 setIsAdmin(false);

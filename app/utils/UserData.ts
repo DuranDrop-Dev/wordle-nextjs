@@ -1,4 +1,5 @@
 import axios from "axios";
+import { UserPayload } from "./Types";
 
 /**
  * Check if the user exists in the database.
@@ -31,13 +32,7 @@ export const checkIfUser = async (email: string): Promise<object> => {
     }
 }
 
-type UserPayload = {
-    email: string;
-    userUID: string;
-    totalGames: number;
-    totalWins: number;
-    totalLosses: number;
-}
+
 /**
  * Update the user stats in the database.
  * 
