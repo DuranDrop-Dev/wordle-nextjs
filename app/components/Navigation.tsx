@@ -9,7 +9,7 @@ const Navigation = () => {
         <>
             <div className="flex justify-between items-center h-15 bg-gray-950">
                 <Menu />
-                <Link href="/">WORDLE</Link>
+                <Link className="text-2xl font-bold text-white" href="/">WORDLE</Link>
                 <NavProfilePic />
             </div>
         </>

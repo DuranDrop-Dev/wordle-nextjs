@@ -476,10 +476,10 @@ const Board = () => {
                                         autoComplete="off"
                                         className={
                                             isLetterGreen(rowIndex + 1, cellIndex + 1)
-                                                ? "text-xl font-bold text-center m-1 rounded-md w-20 h-20 text-white bg-green-500 border border-gray-700 flex items-center justify-center capitalize"
+                                                ? "text-xl font-bold text-center m-1 rounded-md text-white bg-green-500 border border-gray-700 flex items-center justify-center capitalize sm:w-20 sm:h-20 w-14 h-14 transition-all ease-in-out"
                                                 : isLetterYellow(rowIndex + 1, cellIndex + 1)
-                                                    ? "text-xl font-bold text-center m-1 rounded-md w-20 h-20 text-white bg-yellow-500 border border-gray-700 flex items-center justify-center capitalize"
-                                                    : "text-xl font-bold text-center m-1 rounded-md w-20 h-20 text-white bg-gray-800 border border-gray-700 flex items-center justify-center capitalize"
+                                                    ? "text-xl font-bold text-center m-1 rounded-md text-white bg-yellow-500 border border-gray-700 flex items-center justify-center capitalize sm:w-20 sm:h-20 w-14 h-14 transition-all ease-in-out"
+                                                    : "text-xl font-bold text-center m-1 rounded-md text-white bg-gray-800 border border-gray-700 flex items-center justify-center capitalize sm:w-20 sm:h-20 w-14 h-14 transition-all ease-in-out"
                                         }
                                         onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => handleKeyDown(event, rowIndex + 1, cellIndex + 1)}
                                         disabled={isRowDisabled(rowIndex + 1)}
