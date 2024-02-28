@@ -139,6 +139,7 @@ const Board = () => {
         randomizeWordle();
 
         rowTurn.value = 1;
+        setStateRowTurn(rowTurn.value);
 
         isStarted.value = true;
         setStart(true);
