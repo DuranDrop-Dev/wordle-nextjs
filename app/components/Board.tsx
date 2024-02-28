@@ -460,7 +460,7 @@ const Board = () => {
     return (
         <div className='flex flex-col justify-center items-center'>
             {start &&
-                <div className="flex max-w-screen-md mx-auto h-screen flex-col items-center m-5 mt-{60px}">
+                <div className="flex max-w-screen-md mx-auto flex-col items-center m-5 mt-{60px}">
                     {Array.from({ length: BOARD_ROWS }).map((_, rowIndex) => (
                         <div
                             className={isBoardSelected(rowIndex + 1) ? "flex flex-row border border-white" : "flex flex-row"}

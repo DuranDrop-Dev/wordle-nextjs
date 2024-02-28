@@ -14,7 +14,7 @@ const NavProfilePic = () => {
 
     if (loading) return (
         <Image
-            className="rounded-full w-15 h-15"
+            className="rounded-full w-15 h-15 m-3"
             src={profile}
             alt=""
         />)
@@ -23,7 +23,7 @@ const NavProfilePic = () => {
         <>
             {!user.photoURL &&
                 <Image
-                    className="rounded-full w-15 h-15"
+                    className="rounded-full w-15 h-15 m-3"
                     onClick={handleLoginClick}
                     src={profile}
                     alt="profile"
@@ -33,7 +33,7 @@ const NavProfilePic = () => {
             }
             {user.photoURL &&
                 <Image
-                    className="rounded-full w-15 h-15 m-2"
+                    className="rounded-full w-15 h-15 m-3"
                     onClick={handleLoginClick}
                     src={user.photoURL}
                     alt="photoURL"
@@ -47,7 +47,7 @@ const NavProfilePic = () => {
     if (!user) return (
         <>
             <Image
-                className="rounded-full w-15 h-15"
+                className="rounded-full w-15 h-15 m-3"
                 onClick={handleLoginClick}
                 src={profile}
                 alt="profile"
