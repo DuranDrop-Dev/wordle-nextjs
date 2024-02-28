@@ -5,13 +5,18 @@ import { isStarted, rowTurn, wordle, userGuess, inputValues } from '../utils/Sig
 import { InputValues, UserPayload, Word } from '../utils/Types';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../utils/Firebase';
+import { useState } from 'react';
 
 const Board = () => {
     const CELL_PER_ROW = 5;
     const BOARD_ROWS = 6;
     const BOARD_CELLS = BOARD_ROWS * CELL_PER_ROW;
 
-    const [user, loading, error] = useAuthState(auth);
+    const [start, setStart] = useState(isStarted.value);
+    const [stateInputValues, setStateInputValues] = useState(inputValues.value);
+    const [stateRowTurn, setStateRowTurn] = useState(rowTurn.value);
+
+    const [user] = useAuthState(auth);
     const emailUser = user?.email;
 
     const wordleDictionary: Word[] = [
@@ -129,16 +134,36 @@ const Board = () => {
 
     const handleStart = () => {
         inputValues.value = generateInputValues();
+        setStateInputValues(inputValues.value);
 
         randomizeWordle();
 
         rowTurn.value = 1;
 
         isStarted.value = true;
+        setStart(true);
 
         setTimeout(() => {
             handleFirstCellFocus();
         }, 50);
+    }
+
+    const generateInputValues = (): { [key: string]: { value: string; green: boolean; yellow: boolean } } => {
+        const newObject: { [key: string]: { value: string; green: boolean; yellow: boolean } } = {};
+        for (let i = 1; i <= BOARD_CELLS; i++) {
+            newObject[`cell-${i}`] = { value: '', green: false, yellow: false };
+        }
+        return newObject;
+    };
+
+    const randomizeWordle = () => {
+        const randomIndex = Math.floor(Math.random() * wordleDictionary.length);
+
+        const randomWord = wordleDictionary[randomIndex];
+
+        wordle.value = Array.from(randomWord);
+
+        console.log(randomWord);
     }
 
     const isWordInDictionary = () => {
@@ -193,6 +218,7 @@ const Board = () => {
 
         // Update inputValues value
         inputValues.value = clearedInputValues;
+        setStateInputValues(clearedInputValues);
     };
 
     const handleNextCellFocus = (event: React.KeyboardEvent<HTMLInputElement>): void => {
@@ -212,19 +238,10 @@ const Board = () => {
             return;
         }
 
-        if (currentCellNumber % 5 === 0 || currentCellNumber === 30) {
-            (event.target as HTMLElement).focus();
-            const currentTarget = event.target as HTMLInputElement;
-            if (currentTarget instanceof HTMLInputElement) {
-                currentTarget.select();
-            }
+        const nextCellInput: HTMLInputElement | null = nextCellId as HTMLInputElement;
 
-        } else {
-            // Use type assertion to specify that nextCellId is an HTMLInputElement
-            const nextInputCell: HTMLInputElement = nextCellId as HTMLInputElement;
-            nextInputCell.focus();
-            nextInputCell.select();
-        }
+        nextCellInput.focus();
+        nextCellInput.select();
     }
 
     const backSpaceFunction = (event: React.KeyboardEvent<HTMLInputElement>, keyValue: string): boolean => {
@@ -248,6 +265,7 @@ const Board = () => {
                 return newInputValues;
             })(inputValues.value);
 
+            setStateInputValues(inputValues.value);
 
             // Check if it's the first cell, no need to go back
             if (currentCellNumber > 1) {
@@ -274,8 +292,8 @@ const Board = () => {
             // Submit the user's guess
             handleSubmit();
 
-            // Return false to indicate that the default behavior is prevented
-            return false;
+            // Confirm that the enter key was pressed
+            return true;
         }
     }
 
@@ -328,27 +346,11 @@ const Board = () => {
             return newInputValues;
         })(inputValues.value);
 
+        setStateInputValues(inputValues.value);
+
         setTimeout(() => {
             handleNextCellFocus(event);
         }, 50);
-    }
-
-    const generateInputValues = (): { [key: string]: { value: string; green: boolean; yellow: boolean } } => {
-        const newObject: { [key: string]: { value: string; green: boolean; yellow: boolean } } = {};
-        for (let i = 1; i <= BOARD_CELLS; i++) {
-            newObject[`cell-${i}`] = { value: '', green: false, yellow: false };
-        }
-        return newObject;
-    };
-
-    const randomizeWordle = () => {
-        const randomIndex = Math.floor(Math.random() * wordleDictionary.length);
-
-        const randomWord = wordleDictionary[randomIndex];
-
-        wordle.value = Array.from(randomWord);
-
-        console.log(randomWord);
     }
 
     const findYellowIndexes = (word: string, greenIndexes: number[]): number[] => {
@@ -424,12 +426,14 @@ const Board = () => {
         });
 
         inputValues.value = newInputValues;
+        setStateInputValues(inputValues.value);
 
         if (greenIndexes.length === wordle.value.length) {
             alert('You Win! The Wordle was: ' + wordle.value.join('').toUpperCase());
             userGameResult();
             removeOldValues();
             rowTurn.value = 1;
+            setStateRowTurn(rowTurn.value);
             userGuess.value = [];
             randomizeWordle();
             handleFirstCellFocus();
@@ -437,6 +441,7 @@ const Board = () => {
         } else {
             if (rowTurn.value < BOARD_ROWS) {
                 rowTurn.value = rowTurn.value + 1;
+                setStateRowTurn(rowTurn.value);
                 handleNewRowFocus();
                 userGuess.value = [];
             } else {
@@ -444,6 +449,7 @@ const Board = () => {
                 userGameResult();
                 removeOldValues();
                 rowTurn.value = 1;
+                setStateRowTurn(rowTurn.value);
                 userGuess.value = [];
                 randomizeWordle();
                 handleFirstCellFocus();
@@ -452,8 +458,8 @@ const Board = () => {
     }
 
     return (
-        <>
-            {isStarted.value &&
+        <div className='flex flex-col justify-center items-center'>
+            {start &&
                 <div className="flex max-w-screen-md mx-auto h-screen flex-col items-center m-5 mt-{60px}">
                     {Array.from({ length: BOARD_ROWS }).map((_, rowIndex) => (
                         <div
@@ -480,25 +486,26 @@ const Board = () => {
                                         maxLength={1}
                                         id={cellKey}
                                         key={cellKey}
-                                        value={inputValues.value[cellKey].value}
+                                        value={stateInputValues[cellKey].value}
                                         onClick={(event: React.MouseEvent<HTMLInputElement>) => {
                                             const target = event.target as HTMLInputElement;
                                             target?.select();
                                         }}
+                                        readOnly
                                     />
                                 );
                             })}
                         </div>
                     ))}
 
-                    {isStarted.value && <button className="p-1 pl-3 pr-3 
+                    {start && <button className="p-1 pl-3 pr-3 
                     bg-white text-black border-2 border-white
                     rounded-3xl font-bold m-3 
                     hover:bg-black hover:text-white 
                     transition-all ease-in-out" onClick={handleSubmit}>Submit</button>}
                 </div>
             }
-            {!isStarted.value &&
+            {!start &&
                 <div className="flex flex-col items-center gap-5 m-3 bg-gray-950 p-8 rounded-md max-w-2xl">
                     <h1 className="font-bold text-3xl text-center m-6">5 Letter Word Guessing Game</h1>
                     <button className="p-1 pl-3 pr-3 
@@ -508,7 +515,7 @@ const Board = () => {
                     transition-all ease-in-out" onClick={handleStart}>Start</button>
                 </div>
             }
-        </>
+        </div>
     )
 }
 
