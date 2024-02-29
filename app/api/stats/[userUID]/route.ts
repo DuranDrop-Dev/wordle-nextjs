@@ -88,19 +88,21 @@ export async function POST(nextReq: NextRequest, { params }: { params: { userUID
 
         // Check if the user already exists
         const currentUser = await StatsDB.findOne({ userID: params.userUID });
-        console.log("Current User: ", currentUser);
 
-        if (!currentUser) {
-            // Update the user stats in the database
-            const result = await StatsDB.create({ userID: params.userUID.toString(), totalGames: 0, totalWins: 0, totalLosses: 0 });
-
-            // Returning user data as response
-            return NextResponse.json(`Result: ${JSON.stringify(result)}`, {
+        if (currentUser) {
+            // If user exists, cancel the operation without sending back a response
+            return NextResponse.json("Welcome back!", {
                 status: 200
             });
-        } else {
-            return NextResponse.json("Welcome back!", {})
         }
+
+        // Update the user stats in the database
+        await StatsDB.create({ userID: params.userUID.toString(), totalGames: 0, totalWins: 0, totalLosses: 0 });
+
+        // Returning user data as response
+        return NextResponse.json(`New user created!`, {
+            status: 200
+        });
     } catch (error) {
         // Logging error and returning error response
         console.error('Error fetching stats data: ', error);
