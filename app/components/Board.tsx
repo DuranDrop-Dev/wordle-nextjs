@@ -6,7 +6,7 @@ import { InputValues, UserBody, UserPayload, Word } from '../utils/Types';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../utils/Firebase';
 import { ChangeEvent, useState } from 'react';
-import { getStats, putStats } from '../utils/REST';
+import { createNewStats, getStats, putStats } from '../utils/REST';
 
 const Board = () => {
     const CELL_PER_ROW = 5;

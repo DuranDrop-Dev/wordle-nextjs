@@ -1,4 +1,5 @@
-import { UserBody, UserPayload, UserRequestBody } from "./Types";
+import StatsDB from "./Stats";
+import { PostRequest, UserBody, UserPayload, UserRequestBody } from "./Types";
 
 export const getMongoAdmin = async ({ userUID }: UserBody) => {
     try {
@@ -71,6 +72,27 @@ export const putStats = async ({ userUID }: UserBody, newStats: UserPayload, old
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(requestData)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const results = await response.json();
+
+        alert(results);
+    } catch (error) {
+        console.error('Error putting stats: ', error);
+    }
+}
+
+export const createNewStats = async ({ userID }: PostRequest) => {
+    try {
+        const response = await fetch(`/api/stats/${userID}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
 
         if (!response.ok) {

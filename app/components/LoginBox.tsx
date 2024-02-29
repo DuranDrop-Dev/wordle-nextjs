@@ -5,7 +5,7 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../utils/Firebase";
 import { useRouter } from "next/navigation";
-import { getMongoAdmin } from "../utils/REST";
+import { createNewStats, getMongoAdmin } from "../utils/REST";
 import Link from "next/link";
 import Image from "next/image";
 import placeholder from "@icons/profilePlaceholder.svg";
@@ -65,6 +65,7 @@ const LoginBox = () => {
             try {
                 if (user) {
                     setIsAdmin(await getMongoAdmin({ userUID: user.uid }));
+                    await createNewStats({userID: user.uid});
                 } else {
                     setIsAdmin(false);
                 }

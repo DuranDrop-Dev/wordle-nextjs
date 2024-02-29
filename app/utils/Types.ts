@@ -46,3 +46,7 @@ export type UserPayload = {
     totalWins: number;
     totalLosses: number;
 }
+
+export type PostRequest = {
+    userID: string;
+}
