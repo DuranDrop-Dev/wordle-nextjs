@@ -48,5 +48,6 @@ export type UserPayload = {
 }
 
 export type PostRequest = {
+    email: string;
     userID: string;
 }

@@ -86,13 +86,14 @@ export const putStats = async ({ userUID }: UserBody, newStats: UserPayload, old
     }
 }
 
-export const createNewStats = async ({ userID }: PostRequest) => {
+export const createNewStats = async ({ userID, email }: PostRequest) => {
     try {
         const response = await fetch(`/api/stats/${userID}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({ email })
         });
 
         if (!response.ok) {

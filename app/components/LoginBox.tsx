@@ -13,6 +13,7 @@ import EmailForm from "../components/EmailForm";
 
 const LoginBox = () => {
     const [isChecked, setIsChecked] = useState(false);
+    const [initialRender, setInitialRender] = useState(true);
     const [displayUserName, setDisplayUserName] = useState("Guest");
     const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
     const [user, loading, error] = useAuthState(auth);
@@ -59,13 +60,16 @@ const LoginBox = () => {
     }, [user]);
 
     useEffect(() => {
+        if (!initialRender) {
+            return;
+        }
         const fetchData = async () => {
             if (!user) return;
 
             try {
                 if (user) {
                     setIsAdmin(await getMongoAdmin({ userUID: user.uid }));
-                    await createNewStats({userID: user.uid});
+                    await createNewStats({ userID: user.uid, email: user.email as string });
                 } else {
                     setIsAdmin(false);
                 }
@@ -76,7 +80,8 @@ const LoginBox = () => {
         };
 
         fetchData();
-    }, [user, setIsAdmin]);
+        setInitialRender(false);
+    }, [user, setIsAdmin, initialRender]);
 
     if (loading || error) return (
         <div className="flex max-w-screen-md mx-auto flex-col items-center">

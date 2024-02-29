@@ -86,6 +86,28 @@ export async function POST(nextReq: NextRequest, { params }: { params: { userUID
         // Establishing database connection
         await dbConnect();
 
+        // Parse request body
+        const bodyText = await nextReq.text();
+
+        if (!bodyText) {
+            return NextResponse.json({
+                success: false,
+                error: 'Request body is missing'
+            }, { status: 400 });
+        }
+
+        let body: PostRequest;
+
+        try {
+            body = JSON.parse(bodyText);
+        } catch (error) {
+            console.error('Error parsing request body:', error);
+            return NextResponse.json({
+                success: false,
+                error: 'Invalid request body format'
+            }, { status: 400 });
+        }
+
         // Check if the user already exists
         const currentUser = await StatsDB.findOne({ userID: params.userUID });
 
@@ -96,8 +118,9 @@ export async function POST(nextReq: NextRequest, { params }: { params: { userUID
             });
         }
 
+        console.log(body.email);
         // Update the user stats in the database
-        await StatsDB.create({ userID: params.userUID.toString(), totalGames: 0, totalWins: 0, totalLosses: 0 });
+        await StatsDB.create({ userID: params.userUID.toString(), email: body.email.toString(), totalGames: 0, totalWins: 0, totalLosses: 0 });
 
         // Returning user data as response
         return NextResponse.json(`New user created!`, {
