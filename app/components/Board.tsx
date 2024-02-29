@@ -2,10 +2,11 @@
 
 import { updateUserStats } from '../utils/UserData';
 import { isStarted, rowTurn, wordle, userGuess, inputValues } from '../utils/Signals';
-import { InputValues, UserPayload, Word } from '../utils/Types';
+import { InputValues, UserBody, UserPayload, Word } from '../utils/Types';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../utils/Firebase';
 import { ChangeEvent, useState } from 'react';
+import { getStats, putStats } from '../utils/REST';
 
 const Board = () => {
     const CELL_PER_ROW = 5;
@@ -533,14 +534,15 @@ const Board = () => {
         const totalWins = (userGuessString === wordleString) ? 1 : 0;
         const totalLosses = (userGuessString === wordleString) ? 0 : 1;
 
-        const payload: UserPayload = {
+        const newStats: UserPayload = {
             totalGames: 1,
             totalWins: totalWins,
             totalLosses: totalLosses,
         };
 
-        if (emailUser && emailUser !== '' && emailUser !== undefined && emailUser !== null) {
-            await updateUserStats(emailUser, payload);
+        if (user) {
+            const oldStats = await getStats({ userUID: user.uid });
+            await putStats({ userUID: user.uid }, newStats, oldStats as UserPayload);
         }
 
     }
