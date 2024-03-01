@@ -1,6 +1,6 @@
 "use client"
 
-import { isStarted, rowTurn, wordle, userGuess, inputValues } from '../utils/Signals';
+import { isStarted, rowTurn, wordle, userGuess, inputValues, statsSignal } from '../utils/Signals';
 import { InputValues, UserPayload, Word } from '../utils/Types';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../utils/Firebase';
@@ -20,6 +20,7 @@ const Board = () => {
     const [start, setStart] = useState(isStarted.value);
     const [stateInputValues, setStateInputValues] = useState(inputValues.value);
     const [nextCellString, setNextCellString] = useState("");
+    const [stats, setStats] = useState<UserPayload>(statsSignal.value);
 
     const [user] = useAuthState(auth);
 
@@ -149,7 +150,7 @@ const Board = () => {
     /**
      * Set the input values to the default values and start the game
      */
-    const handleStart = () => {
+    const handleStart = async () => {
         // Set the input values to the default values
         inputValues.value = generateInputValues();
         setStateInputValues(inputValues.value);
@@ -163,6 +164,18 @@ const Board = () => {
         // Switch to started state
         isStarted.value = true;
         setStart(true);
+
+        // Set Stats state
+        if (user) {
+            const data = await getStats({ userUID: user.uid });
+
+            if (data && !Array.isArray(data) && typeof data === 'object') {
+                statsSignal.value = data;
+                setStats(data);
+            } else {
+                console.error('Invalid stats data received:', data);
+            }
+        }
 
         // Focus the first cell
         setTimeout(() => {
@@ -543,6 +556,17 @@ const Board = () => {
             // Check if oldStats is a valid UserPayload
             if (oldStats && !Array.isArray(oldStats) && typeof oldStats === 'object') {
                 await putStats({ userUID: user.uid }, newStats, oldStats);
+
+                const mergedStats: { [key: string]: number } = {};
+
+                Object.keys(oldStats).forEach(key => {
+                    mergedStats[key] = oldStats[key] + newStats[key];
+                });
+
+                if (mergedStats && !Array.isArray(mergedStats) && typeof mergedStats === 'object') {
+                    statsSignal.value = mergedStats as UserPayload;
+                    setStats(mergedStats as UserPayload);
+                }
             } else {
                 // Handle the case where oldStats is not of type UserPayload
                 console.error('Invalid stats data received:', oldStats);
@@ -671,6 +695,15 @@ const Board = () => {
                     ))}
 
                     {start && <button className={btnString} onClick={handleSubmit}>Submit</button>}
+                    <div className="flex flex-col gap-2 m-7">
+                        {Object.entries(stats).map(([key, value]) => (
+                            <div
+                                className="text-center font-bold text-2xl"
+                                key={key}>{key === 'totalWins' ? 'Wins' : 'Losses'}: {value}
+                            </div>
+                        ))}
+                    </div>
+
                 </div>
             }
             {!start &&
