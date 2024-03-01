@@ -24,9 +24,11 @@ const LoginBox = () => {
         try {
             await signInWithPopup(auth, googleProvider);
             console.log("GoogleLogin Result Received");
+            if (!user) return;
+            createNewStats({ userID: user.uid, email: user.email as string });
         } catch (error) {
             console.log("GoogleLogin Error:", error);
-        }
+        } 
     };
 
     const Logout = () => {
@@ -69,7 +71,6 @@ const LoginBox = () => {
             try {
                 if (user) {
                     setIsAdmin(await getMongoAdmin({ userUID: user.uid }));
-                    await createNewStats({ userID: user.uid, email: user.email as string });
                 } else {
                     setIsAdmin(false);
                 }

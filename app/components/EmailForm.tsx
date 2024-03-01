@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createNewStats } from '../utils/REST';
 
 interface EmailFormProps {
     isChecked: boolean;
@@ -49,6 +50,8 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
                 .then((userCredential) => {
                     const user = userCredential.user;
                     console.log("Email User Created:", user.email)
+                    if (!user) return;
+                    createNewStats({ userID: user.uid, email: user.email as string });
                 })
                 .catch((error) => {
                     const errorCode = error.code;

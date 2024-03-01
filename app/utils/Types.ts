@@ -18,6 +18,7 @@ export type UserRequestBody = {
     _id: string;
     email: string;
     userUID: string;
+    dateCreated: Date;
     admin: boolean;
     totalGames?: number;
     totalWins?: number;

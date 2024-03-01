@@ -1,9 +1,8 @@
-import StatsDB from "./Stats";
 import { PostRequest, UserBody, UserPayload, UserRequestBody } from "./Types";
 
 export const getMongoAdmin = async ({ userUID }: UserBody) => {
     try {
-        const response = await fetch(`/api/user/${userUID}`, {
+        const response = await fetch(`/api/admin/${userUID}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -27,7 +26,7 @@ export const getMongoAdmin = async ({ userUID }: UserBody) => {
 
 export const getStats = async ({ userUID }: UserBody) => {
     try {
-        const response = await fetch(`/api/stats/${userUID}`, {
+        const response = await fetch(`/api/user/${userUID}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -66,7 +65,7 @@ export const putStats = async ({ userUID }: UserBody, newStats: UserPayload, old
             body: mergedStats
         };
 
-        const response = await fetch(`/api/stats/${userUID}`, {
+        const response = await fetch(`/api/user/${userUID}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -88,7 +87,7 @@ export const putStats = async ({ userUID }: UserBody, newStats: UserPayload, old
 
 export const createNewStats = async ({ userID, email }: PostRequest) => {
     try {
-        const response = await fetch(`/api/stats/${userID}`, {
+        const response = await fetch(`/api/user/${userID}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
