@@ -117,9 +117,10 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
                             <form
                                 className='flex flex-col items-center gap-3 rounded-3xl p-4'
                                 onSubmit={handleLoginBtn}>
-                                <div className='inputContainer'>
+                                <div className='flex flex-col items-center'>
                                     <label htmlFor="email">Email:</label>
                                     <input
+                                        className='text-white p-1 px-3 rounded-3xl bg-slate-700 text-left w-auto'
                                         autoComplete="email"
                                         type="email"
                                         id="email"
@@ -128,9 +129,10 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                                <div className='inputContainer'>
+                                <div className='flex flex-col items-center'>
                                     <label htmlFor="password">Password:</label>
                                     <input
+                                        className='text-white p-1 px-3 rounded-3xl bg-slate-700 text-left w-auto'
                                         autoComplete="current-password"
                                         type="password"
                                         id="password"
@@ -161,12 +163,13 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
                         <>
                             <h3 className='text-xl bold-font'>Create an Account</h3>
                             <form
-                                className='flex flex-col items-center gap-3 rounded-3xl p-4'
+                                className='flex flex-col items-center gap-3 rounded-3xl p-4 w-full'
                                 onSubmit={handleSignUpBtn}
                             >
-                                <div className='inputContainer'>
+                                <div className='flex flex-col items-center'>
                                     <label htmlFor="email">Email:</label>
                                     <input
+                                        className='text-white p-1 px-3 rounded-3xl bg-slate-700 text-left w-auto'
                                         autoComplete="email"
                                         type="email"
                                         id="email"
@@ -175,9 +178,10 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                                <div className='inputContainer'>
+                                <div className='flex flex-col items-center'>
                                     <label htmlFor="password">Password:</label>
                                     <input
+                                        className='text-white p-1 px-3 rounded-3xl bg-slate-700 text-left w-auto'
                                         autoComplete="new-password"
                                         type="password"
                                         id="password"

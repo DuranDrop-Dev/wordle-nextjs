@@ -44,9 +44,10 @@ export const getStats = async ({ userUID }: UserBody) => {
             totalLosses: data[0].totalLosses
         }
 
+        console.log(stats);
         return stats;
     } catch (error) {
-        console.error('Error fetching admin data: ', error);
+        console.error('Error fetching stats data: ', error);
         return false;
     }
 }

@@ -539,6 +539,7 @@ const Board = () => {
 
         if (user) {
             const oldStats = await getStats({ userUID: user.uid });
+            console.log(oldStats);
             await putStats({ userUID: user.uid }, newStats, oldStats as UserPayload);
         }
 

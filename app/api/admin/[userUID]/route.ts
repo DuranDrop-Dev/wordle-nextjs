@@ -15,14 +15,11 @@ export async function GET(request: Request, { params }: { params: { userUID: str
 
         if (adminData) {
             // Admin data found
-            console.log("Admin data: ", adminData);
+            return NextResponse.json(adminData);
         } else {
             // Admin data not found
-            console.log("Admin data not found for user!");
+            return NextResponse.json("Admin data not found for user!");
         }
-
-        // Returning admin data as response
-        return NextResponse.json(adminData);
     } catch (error) {
         // Logging error and returning error response
         console.error('Error fetching admin data: ', error);
