@@ -1,12 +1,11 @@
 "use client"
 
-import { updateUserStats } from '../utils/UserData';
 import { isStarted, rowTurn, wordle, userGuess, inputValues } from '../utils/Signals';
-import { InputValues, UserBody, UserPayload, Word } from '../utils/Types';
+import { InputValues, UserPayload, Word } from '../utils/Types';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../utils/Firebase';
 import { ChangeEvent, useState } from 'react';
-import { createNewStats, getStats, putStats } from '../utils/REST';
+import { getStats, putStats } from '../utils/REST';
 
 const Board = () => {
     const CELL_PER_ROW = 5;
@@ -23,7 +22,6 @@ const Board = () => {
     const [nextCellString, setNextCellString] = useState("");
 
     const [user] = useAuthState(auth);
-    const emailUser = user?.email;
 
     const wordleDictionary: Word[] = [
         'actor', 'adopt', 'admit', 'adult', 'after',
