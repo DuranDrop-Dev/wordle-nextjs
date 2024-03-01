@@ -10,7 +10,7 @@ export async function GET(request: Request, { params }: { params: { userUID: str
         // Ensure you have an index on the 'userUID' field for optimal performance
         const adminData = await UserDB.find(
             {userUID: params.userUID},
-            { _id: 0, __v: 0, email: 0, userID: 0, dateCreated: 0, totalWins: 0, totalLosses: 0 }
+            { _id: 0, __v: 0, email: 0, userID: 0, dateCreated: 0, totalWins: 0, totalLosses: 0, userUID: 0 }
         );
 
         if (adminData) {

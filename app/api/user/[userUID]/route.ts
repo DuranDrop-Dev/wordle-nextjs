@@ -8,7 +8,6 @@ export async function GET(request: Request, { params }: { params: { userUID: str
         // Establishing database connection
         await dbConnect();
 
-        console.log(params.userUID);
         // Finding admin data based on userUID
         const statsData = await UserDB.findOne({ userUID: params.userUID }, { _id: 0, __v: 0, email:0, userID: 0, dateCreated: 0, admin:0, userUID: 0});
 
