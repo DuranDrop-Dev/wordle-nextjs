@@ -539,10 +539,15 @@ const Board = () => {
 
         if (user) {
             const oldStats = await getStats({ userUID: user.uid });
-            console.log(oldStats);
-            await putStats({ userUID: user.uid }, newStats, oldStats as UserPayload);
-        }
 
+            // Check if oldStats is a valid UserPayload
+            if (oldStats && !Array.isArray(oldStats) && typeof oldStats === 'object') {
+                await putStats({ userUID: user.uid }, newStats, oldStats);
+            } else {
+                // Handle the case where oldStats is not of type UserPayload
+                console.error('Invalid stats data received:', oldStats);
+            }
+        }
     }
 
     /**

@@ -60,7 +60,7 @@ export async function PUT(nextReq: NextRequest, { params }: { params: { userUID:
         const totalLosses = body?.body?.totalLosses ?? 0;
 
         // Update the user stats in the database
-        const result = await UserDB.updateOne({ userID: params.userUID }, { $set: { totalWins: totalWins, totalLosses: totalLosses } });
+        const result = await UserDB.updateOne({ userUID: params.userUID }, { $set: { totalWins: totalWins, totalLosses: totalLosses } });
 
         console.log("Result: ", result);
 

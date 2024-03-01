@@ -37,15 +37,9 @@ export const getStats = async ({ userUID }: UserBody) => {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data: [UserRequestBody] = await response.json();
+        const data: [UserPayload] = await response.json();
 
-        const stats = {
-            totalWins: data[0].totalWins,
-            totalLosses: data[0].totalLosses
-        }
-
-        console.log(stats);
-        return stats;
+        return data;
     } catch (error) {
         console.error('Error fetching stats data: ', error);
         return false;
@@ -54,7 +48,6 @@ export const getStats = async ({ userUID }: UserBody) => {
 
 export const putStats = async ({ userUID }: UserBody, newStats: UserPayload, oldStats: UserPayload) => {
     try {
-
         const mergedStats: { [key: string]: number } = {};
 
         Object.keys(oldStats).forEach(key => {
