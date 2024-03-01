@@ -8,11 +8,9 @@ export async function GET(request: Request, { params }: { params: { userUID: str
         // Establishing database connection
         await dbConnect();
 
-        // Finding admin data based on email and userUID
-        const statsData = await UserDB.find(
-            { userID: params.userUID },
-            { _id: 0, __v: 0, email: 0, userID: 0, admin: 0, dateCreated: 0 }
-        );
+        console.log(params.userUID);
+        // Finding admin data based on userUID
+        const statsData = await UserDB.findOne({ userUID: params.userUID }, { _id: 0, __v: 0, email:0, userID: 0, dateCreated: 0, admin:0, userUID: 0});
 
         // Check if the blog post exists
         if (!statsData) {
@@ -59,12 +57,11 @@ export async function PUT(nextReq: NextRequest, { params }: { params: { userUID:
             }, { status: 400 });
         }
 
-        const totalGames = body?.body.totalGames ?? 0;
         const totalWins = body?.body?.totalWins ?? 0;
         const totalLosses = body?.body?.totalLosses ?? 0;
 
         // Update the user stats in the database
-        const result = await UserDB.updateOne({ userID: params.userUID }, { $set: { totalGames: totalGames, totalWins: totalWins, totalLosses: totalLosses } });
+        const result = await UserDB.updateOne({ userID: params.userUID }, { $set: { totalWins: totalWins, totalLosses: totalLosses } });
 
         console.log("Result: ", result);
 
@@ -118,9 +115,9 @@ export async function POST(nextReq: NextRequest, { params }: { params: { userUID
             });
         }
 
-        // Update the user stats in the database
+        // Create a new user in the database
         await UserDB.create({ 
-            userIUD: params.userUID.toString(), 
+            userUID: params.userUID.toString(), 
             email: body.email.toString(), 
             dateCreated: new Date(), 
             admin: false, 

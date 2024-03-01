@@ -533,7 +533,6 @@ const Board = () => {
         const totalLosses = (userGuessString === wordleString) ? 0 : 1;
 
         const newStats: UserPayload = {
-            totalGames: 1,
             totalWins: totalWins,
             totalLosses: totalLosses,
         };

@@ -20,20 +20,17 @@ export type UserRequestBody = {
     userUID: string;
     dateCreated: Date;
     admin: boolean;
-    totalGames?: number;
     totalWins?: number;
     totalLosses?: number;
 }
 
 export type PutRequest = {
-    totalGames: number;
     totalWins: number;
     totalLosses: number;
     body: MergedStats;
 }
 
 export type MergedStats = {
-    totalGames: number;
     totalWins: number;
     totalLosses: number;
 }
@@ -43,7 +40,6 @@ export type UserBody = {
 
 export type UserPayload = {
     [key: string]: number;
-    totalGames: number;
     totalWins: number;
     totalLosses: number;
 }

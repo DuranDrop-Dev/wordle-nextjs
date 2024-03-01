@@ -40,7 +40,6 @@ export const getStats = async ({ userUID }: UserBody) => {
         const data: [UserRequestBody] = await response.json();
 
         const stats = {
-            totalGames: data[0].totalGames,
             totalWins: data[0].totalWins,
             totalLosses: data[0].totalLosses
         }
