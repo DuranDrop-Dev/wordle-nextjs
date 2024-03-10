@@ -1,7 +1,7 @@
 "use client"
 
 import { isStarted, rowTurn, wordle, userGuess, inputValues, statsSignal } from '../utils/Signals';
-import { InputValues, UserPayload, Word } from '../utils/Types';
+import { InputValues, UserPayload } from '../utils/Types';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../utils/Firebase';
 import { ChangeEvent, useState } from 'react';
@@ -37,7 +37,7 @@ const Board = () => {
     /**
      * Set the input values to the default values and start the game
      */
-    const handleStart = async () => {
+    const handleStart = async (): Promise<void> => {
         // Set the input values to the default values
         inputValues.value = generateInputValues();
         setStateInputValues(inputValues.value);
@@ -98,7 +98,7 @@ const Board = () => {
      * Generate a random word from the wordleDictionary and assign it to the wordle value.
      *
      */
-    const randomizeWordle = () => {
+    const randomizeWordle = (): void => {
         // Randomize number
         const randomIndex = Math.floor(Math.random() * wordleDictionary.length);
 
@@ -117,7 +117,7 @@ const Board = () => {
      *
      * @return {boolean} true if the word is in the dictionary, false otherwise
      */
-    const isWordInDictionary = () => {
+    const isWordInDictionary = (): boolean => {
         // Convert user guess to lowercase
         const lowerCaseWord = userGuess.value.join('').toLowerCase();
 
@@ -131,7 +131,7 @@ const Board = () => {
      * @param {number} row - the row to check
      * @return {boolean} true if the row is disabled, false otherwise
      */
-    const isRowDisabled = (row: number) => {
+    const isRowDisabled = (row: number): boolean => {
         return row !== rowTurn.value;
     };
 
@@ -141,20 +141,14 @@ const Board = () => {
      * @param {number} row - the row to check
      * @return {boolean} true if the row is selected, false otherwise
      */
-    const isBoardSelected = (row: number) => {
+    const isBoardSelected = (row: number): boolean => {
         return row === rowTurn.value;
     }
 
     /**
      * Function to handle focus on a new row.
      */
-    const handleNewRowFocus = () => {
-        const cellName = document.getElementById(`cell-${rowTurn.value * 5 + 1}`) as HTMLInputElement | null;
-
-        if (cellName) {
-            cellName.select();
-            cellName.focus();
-
+    const handleNewRowFocus = (): void => {
             if (!nextCellString) {
                 // Handle case where nextCellId is not found
                 console.error("Next cell element not found");
@@ -167,15 +161,14 @@ const Board = () => {
                 nextCellInput.select();
                 nextCellInput.focus();
             }, 50);
-        }
     }
 
     /**
      * Select the first cell and focus on it
      */
-    const handleFirstCellFocus = () => {
+    const handleFirstCellFocus = (): void => {
         // Select the first cell and focus on it
-        const firstCell = document.getElementById('cell-1') as HTMLInputElement | null;
+        const firstCell = document.getElementById('cell-1') as HTMLInputElement;
 
         if (firstCell) {
             firstCell.select();
@@ -191,7 +184,7 @@ const Board = () => {
      * @return {boolean} whether the letter is green
      */
     const isLetterGreen = (row: number, cell: number): boolean => {
-        return inputValues.value[`cell-${(row - 1) * 5 + cell}`].green;
+        return inputValues.value[`cell-${(row - 1) * CELL_PER_ROW + cell}`].green;
     }
 
     /**
@@ -202,7 +195,7 @@ const Board = () => {
      * @return {boolean} true if the letter is yellow, false otherwise
      */
     const isLetterYellow = (row: number, cell: number): boolean => {
-        return inputValues.value[`cell-${(row - 1) * 5 + cell}`].yellow;
+        return inputValues.value[`cell-${(row - 1) * CELL_PER_ROW + cell}`].yellow;
     }
 
     /**
@@ -245,10 +238,7 @@ const Board = () => {
             return;
         }
 
-        const nextCellInput: HTMLInputElement | null = nextCellId as HTMLInputElement;
-
-        nextCellInput.focus();
-        nextCellInput.select();
+        nextCellId.focus();
     }
 
     /**
@@ -305,7 +295,7 @@ const Board = () => {
      * @param {string} keyValue - the value of the key being pressed
      * @return {boolean} true if the "Enter" key was pressed, otherwise undefined
      */
-    const enterFunction = (event: React.KeyboardEvent<HTMLInputElement>, keyValue: string) => {
+    const enterFunction = (event: React.KeyboardEvent<HTMLInputElement>, keyValue: string): boolean => {
         if (keyValue === 'Enter') {
             // Prevent the default behavior of the enter key
             event.preventDefault();
@@ -316,6 +306,7 @@ const Board = () => {
             // Confirm that the enter key was pressed
             return true;
         }
+        return false;
     }
 
     /**
@@ -325,11 +316,12 @@ const Board = () => {
      * @param {string} keyValue - the value of the key pressed
      * @return {boolean} true if the key is unwanted and the event was prevented, otherwise undefined
      */
-    const isUnwantedKey = (event: React.KeyboardEvent<HTMLInputElement>, keyValue: string) => {
+    const isUnwantedKey = (event: React.KeyboardEvent<HTMLInputElement>, keyValue: string): boolean => {
         if (unwantedKeys.includes(keyValue)) {
             event.preventDefault();
             return true;
         }
+        return false;
     };
 
     /**
@@ -340,7 +332,7 @@ const Board = () => {
      * @param {number} cell - The cell number
      * @return {void} 
      */
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>, row: number, cell: number) => {
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>, row: number, cell: number): void => {
         // Get the key value
         const keyValue = event.key;
 
@@ -367,13 +359,13 @@ const Board = () => {
         // Update the input values
         inputValues.value = ((prevInputValues: InputValues) => {
             const newInputValues: InputValues = { ...prevInputValues };
-            const key: string = `cell-${(row - 1) * 5 + cell}`;
+            const key: string = `cell-${(row - 1) * CELL_PER_ROW + cell}`;
             newInputValues[key].value = keyValue.toLowerCase();
             return newInputValues;
         })(inputValues.value);
 
         setStateInputValues(inputValues.value);
-        setNextCellString(`cell-${(row - 1) * 5 + cell + 1}`);
+        setNextCellString(`cell-${(row - 1) * CELL_PER_ROW + cell + 1}`);
 
         setTimeout(() => {
             handleNextCellFocus(event);
@@ -383,8 +375,7 @@ const Board = () => {
     /**
      * Find the indexes of the characters in the word that are not in the greenIndexes array,
      * and are present in the wordle.value.
-     *
-     * @param {string} word - the input word
+     * @param {string} tempWordle - the input word
      * @param {number[]} greenIndexes - the indexes of green characters
      * @return {number[]} the indexes of yellow characters
      */
@@ -460,8 +451,8 @@ const Board = () => {
      */
     const handleSubmit = (): void => {
         // Check if the user's guess is valid
-        if (userGuess.value.join('').length !== 5) {
-            alert('Word must be 5 characters.');
+        if (userGuess.value.join('').length !== CELL_PER_ROW) {
+            alert(`Word must be ${CELL_PER_ROW} characters.`);
             return;
         }
 
@@ -535,7 +526,7 @@ const Board = () => {
                             key={`row-${rowIndex + 1}`}
                         >
                             {Array.from({ length: CELL_PER_ROW }).map((_, cellIndex) => {
-                                const cellKey = `cell-${rowIndex * 5 + cellIndex + 1}`;
+                                const cellKey = `cell-${rowIndex * CELL_PER_ROW + cellIndex + 1}`;
 
                                 return (
                                     <input
