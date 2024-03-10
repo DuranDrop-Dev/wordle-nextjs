@@ -3,7 +3,7 @@
   "short_name": "Wordle",
   "theme_color": "#030712",
   "background_color": "#030712",
-  "display": "browser",
+  "display": "standalone",
   "orientation": "portrait",
   "scope": "/",
   "start_url": "/",
