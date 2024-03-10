@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import Navigation from "./components/Navigation";
 import "./globals.css";
@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   title: "Wordle NextJS App",
   description: "Worlde Imitation Written in NextJS",
 };
+
+export const viewport: Viewport = {
+  themeColor: { media: "(prefers-color-scheme: dark)", color: "#0C0A09" }
+}
 
 export default function RootLayout({
   children,
