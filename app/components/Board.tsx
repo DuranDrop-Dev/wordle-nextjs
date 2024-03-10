@@ -499,10 +499,10 @@ const Board = () => {
         inputValues.value = newInputValues;
         setStateInputValues(inputValues.value);
 
-        // Allow state to update
-        setTimeout(() => {
-            // Check if the user's guess is correct
-            if (greenIndexes.length === wordle.value.length) {
+        // Check if the user's guess is correct
+        if (greenIndexes.length === wordle.value.length) {
+            // Allow UI to update before redirecting
+            setTimeout(() => {
                 alert('You Win! The Wordle was: ' + wordle.value.join('').toUpperCase());
                 userGameResult();
                 removeOldValues();
@@ -511,22 +511,22 @@ const Board = () => {
                 randomizeWordle();
                 handleFirstCellFocus();
                 return;
+            }, 300);
+        } else {
+            if (rowTurn.value < BOARD_ROWS) {
+                rowTurn.value = rowTurn.value + 1;
+                handleNewRowFocus();
+                userGuess.value = [];
             } else {
-                if (rowTurn.value < BOARD_ROWS) {
-                    rowTurn.value = rowTurn.value + 1;
-                    handleNewRowFocus();
-                    userGuess.value = [];
-                } else {
-                    alert('You Lose! Try Again! The Wordle was: ' + wordle.value.join('').toUpperCase());
-                    userGameResult();
-                    removeOldValues();
-                    rowTurn.value = 1;
-                    userGuess.value = [];
-                    randomizeWordle();
-                    handleFirstCellFocus();
-                }
+                alert('You Lose! Try Again! The Wordle was: ' + wordle.value.join('').toUpperCase());
+                userGameResult();
+                removeOldValues();
+                rowTurn.value = 1;
+                userGuess.value = [];
+                randomizeWordle();
+                handleFirstCellFocus();
             }
-        }, 300);
+        }
     }
 
     return (
