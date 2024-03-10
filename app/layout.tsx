@@ -8,6 +8,8 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Wordle NextJS App",
   description: "Worlde Imitation Written in NextJS",
+  manifest: "/manifest.json",
+  icons: "/site.webmanifest",
 };
 
 export const viewport: Viewport = {
