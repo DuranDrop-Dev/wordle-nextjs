@@ -8,4 +8,4 @@ Live version of the web app can be found here: <a href="https://wordle.durandrop
 
 Testing has not been intensive enough to squash out all bugs. If found they shall be published here.
 
-<li>When the user guess has 2 letters of the same kind, the game will mark both letters yellow when it should only mark one. (Example: User Guess: TEETH, Wordle: EARTH) the game should only mark one of the E letters in TEETH yellow but it marks both of them yellow.</li>
+<li>[FIXED] When the user guess has 2 letters of the same kind, the game will mark both letters yellow when it should only mark one. (Example: User Guess: TEETH, Wordle: EARTH) the game should only mark one of the E letters in TEETH yellow but it marks both of them yellow.</li>
