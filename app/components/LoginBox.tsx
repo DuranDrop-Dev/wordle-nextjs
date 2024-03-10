@@ -28,7 +28,7 @@ const LoginBox = () => {
             createNewStats({ userID: user.uid, email: user.email as string });
         } catch (error) {
             console.log("GoogleLogin Error:", error);
-        } 
+        }
     };
 
     const Logout = () => {
@@ -110,16 +110,21 @@ const LoginBox = () => {
                             and{" "}
                             <Link href="/privacy-policy"><i><b>Privacy Policy</b></i></Link>
                         </i>
+                        <br /><br />
+                        <p className="text-xs text-center font-bold">
+                            PLEASE CHECK THE BOX TO ENABLE LOGIN
+                        </p>
                     </div>
                 </label>
                 <br />
                 <h3 className="text-xl bold-font">Login/Sign in with Google</h3>
                 <button
                     className="p-1 pl-3 pr-3 
-                    bg-white text-black border-2 border-white
+                    bg-white text-black border border-white
                     rounded-3xl font-bold  
                     hover:bg-black hover:text-white 
-                    transition-all ease-in-out"
+                    transition-all ease-in-out
+                    disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-black"
                     disabled={!isChecked}
                     id="loginBtn"
                     onClick={GoogleLogin}
@@ -159,7 +164,7 @@ const LoginBox = () => {
                 </h3>
                 <button
                     className="p-1 pl-3 pr-3 
-                    bg-white text-black border-2 border-white
+                    bg-white text-black border border-white
                     rounded-3xl font-bold  
                     hover:bg-black hover:text-white 
                     transition-all ease-in-out"
@@ -172,7 +177,7 @@ const LoginBox = () => {
                     <div className="flex flex-row items-center gap-3">
                         <button
                             className="p-1 pl-3 pr-3 
-                            bg-white text-black border-2 border-white
+                            bg-white text-black border border-white
                             rounded-3xl font-bold  
                             hover:bg-black hover:text-white 
                             transition-all ease-in-out"

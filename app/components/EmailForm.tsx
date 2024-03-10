@@ -99,10 +99,10 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
                     <h3 className='text-xl bold-font'>Login with Email</h3>
                     <button
                         className="p-1 pl-3 pr-3 
-                        bg-white text-black border-2 border-white
+                        bg-white text-black border border-white
                         rounded-3xl font-bold  
                         hover:bg-black hover:text-white 
-                        transition-all ease-in-out"
+                        transition-all ease-in-out disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-black"
                         disabled={!isChecked}
                         onClick={showEmailForms}>
                         Email
@@ -143,7 +143,7 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
                                 </div>
                                 <button
                                     className="p-1 pl-3 pr-3 
-                                    bg-white text-black border-2 border-white
+                                    bg-white text-black border border-white
                                     rounded-3xl font-bold  
                                     hover:bg-black hover:text-white 
                                     transition-all ease-in-out"
@@ -192,7 +192,7 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
                                 </div>
                                 <button
                                     className="p-1 pl-3 pr-3 
-                                    bg-white text-black border-2 border-white
+                                    bg-white text-black border border-white
                                     rounded-3xl font-bold  
                                     hover:bg-black hover:text-white 
                                     transition-all ease-in-out"

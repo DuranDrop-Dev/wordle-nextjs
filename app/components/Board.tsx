@@ -13,7 +13,7 @@ const Board = () => {
     const BOARD_ROWS = 6;
     const BOARD_CELLS = BOARD_ROWS * CELL_PER_ROW;
     const btnString = `p-1 pl-3 pr-3 
-        bg-white text-black border-2 border-white
+        bg-white text-black border border-white
         rounded-3xl font-bold m-3 
         hover:bg-black hover:text-white 
         transition-all ease-in-out`;
@@ -422,16 +422,11 @@ const Board = () => {
      *
      * @return {Promise<void>} 
      */
-    const userGameResult = async (): Promise<void> => {
-        const userGuessString = userGuess.value.join('').toLowerCase();
-        const wordleString = wordle.value.join('').toLowerCase();
-
-        const totalWins = (userGuessString === wordleString) ? 1 : 0;
-        const totalLosses = (userGuessString === wordleString) ? 0 : 1;
+    const userGameResult = async (win: boolean): Promise<void> => {
 
         const newStats: UserPayload = {
-            totalWins: totalWins,
-            totalLosses: totalLosses,
+            totalWins: win ? 1 : 0,
+            totalLosses: win ? 0 : 1,
         };
 
         if (user) {
@@ -504,7 +499,7 @@ const Board = () => {
             // Allow UI to update before redirecting
             setTimeout(() => {
                 alert('You Win! The Wordle was: ' + wordle.value.join('').toUpperCase());
-                userGameResult();
+                userGameResult(true);
                 removeOldValues();
                 rowTurn.value = 1;
                 userGuess.value = [];
@@ -519,7 +514,7 @@ const Board = () => {
                 userGuess.value = [];
             } else {
                 alert('You Lose! Try Again! The Wordle was: ' + wordle.value.join('').toUpperCase());
-                userGameResult();
+                userGameResult(false);
                 removeOldValues();
                 rowTurn.value = 1;
                 userGuess.value = [];
@@ -583,14 +578,33 @@ const Board = () => {
                     ))}
 
                     {start && <button className={btnString} onClick={handleSubmit}>Submit</button>}
-                    <div className="flex flex-col gap-2 m-7">
-                        {Object.entries(stats).map(([key, value]) => (
-                            <div
-                                className="text-center font-bold text-2xl"
-                                key={key}>{key === 'totalWins' ? 'Wins' : 'Losses'}: {value}
-                            </div>
-                        ))}
-                    </div>
+                    
+                    {user &&
+                        <div className="flex flex-col gap-2 m-7">
+                            <table className="border-collapse border-2 border-gray-500">
+                                <thead>
+                                    <tr>
+                                        <th className="border border-gray-500 px-4 py-2">RECORD</th>
+                                        <th className="border border-gray-500 px-4 py-2">SCORE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {Object.entries(stats).map(([key, value]) => (
+                                        <tr key={key}>
+                                            <td className="border border-gray-500 px-4 py-2">{key === 'totalWins' ? 'Wins' : 'Losses'}</td>
+                                            <td className="border border-gray-500 px-4 py-2">{value}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+
+                    {!user &&
+                        <div className="flex flex-col gap-2 m-7">
+                            <p className="text-center">*Create an account or login to see stats!</p>
+                        </div>
+                    }
 
                 </div>
             }
