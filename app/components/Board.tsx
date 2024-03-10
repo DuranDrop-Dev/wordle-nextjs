@@ -6,6 +6,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../utils/Firebase';
 import { ChangeEvent, useState } from 'react';
 import { getStats, putStats } from '../utils/REST';
+import { wordleDictionary } from '../utils/WordleDictionary';
 
 const Board = () => {
     const CELL_PER_ROW = 5;
@@ -21,121 +22,7 @@ const Board = () => {
     const [stateInputValues, setStateInputValues] = useState(inputValues.value);
     const [nextCellString, setNextCellString] = useState("");
     const [stats, setStats] = useState<UserPayload>(statsSignal.value);
-
     const [user] = useAuthState(auth);
-
-    const wordleDictionary: Word[] = [
-        'actor', 'adopt', 'admit', 'adult', 'after',
-        'again', 'agent', 'alarm', 'alive', 'allow',
-        'alone', 'alter', 'angel', 'anger', 'angle',
-        'angry', 'apart', 'alpha', 'apple',
-        'apply', 'arena', 'argue', 'array', 'aside',
-        'asset', 'audio', 'audit', 'award', 'badly',
-        'baker', 'bases', 'basic', 'beach', 'begin',
-        'being', 'below', 'bench', 'billy', 'birth',
-        'black',
-        'blame', 'blind', 'blink', 'block', 'blood',
-        'bored', 'bound', 'board', 'booth',
-        'bound', 'brain', 'brand', 'bread', 'break',
-        'brief', 'bring', 'broke', 'brown', 'build',
-        'bully',
-        'buyer', 'cable', 'calif', 'carry', 'catch',
-        'cause', 'chain', 'chair', 'chart', 'chase',
-        'cheap',
-        'check', 'chest', 'chess', 'chief', 'child',
-        'chill',
-        'china', 'chloe', 'choir', 'chord', 'chose',
-        'chose', 'civil', 'claim', 'clean', 'clear',
-        'click', 'clock', 'close', 'cloud', 'coach',
-        'coast',
-        'could', 'count', 'court', 'cover', 'craft',
-        'cream', 'crime', 'cross', 'crown', 'crust',
-        'curve',
-        'daily', 'dance', 'dated', 'dealt', 'death',
-        'delay', 'depth', 'doubt', 'dozen', 'draft',
-        'drain', 'drama', 'drawn', 'dream', 'dress',
-        'drink',
-        'drive', 'drove', 'eager', 'early', 'earth',
-        'eight', 'elite', 'empty', 'enemy', 'enjoy',
-        'enter', 'entry', 'equal', 'error', 'event',
-        'every', 'exact', 'exist', 'extra', 'faith',
-        'false', 'fault', 'fiber', 'field', 'fifth',
-        'fifty', 'fight', 'final', 'first', 'fixed',
-        'flame', 'flash', 'fleet', 'float', 'floor',
-        'flour', 'flown', 'fluid', 'focus', 'foggy',
-        'force', 'forth', 'forum', 'found', 'frame',
-        'frank', 'fraud', 'fresh', 'front', 'fruit',
-        'fudge', 'fully', 'funny', 'given', 'glass',
-        'glory', 'going', 'grain', 'grief', 'grove',
-        'grace', 'grade', 'grand', 'grant', 'grass',
-        'great', 'green', 'gross', 'group', 'grown',
-        'guard', 'guess', 'guide', 'happy', 'harry',
-        'heart', 'heavy', 'hence', 'henry', 'horse',
-        'hotel', 'house', 'human', 'ideal', 'image',
-        'index', 'inner', 'input', 'issue', 'japan',
-        'jimmy', 'joint', 'jones', 'judge', 'known',
-        'label', 'large', 'laser', 'later', 'laugh',
-        'layer', 'learn', 'least', 'leave', 'legal',
-        'level', 'lewis', 'light', 'limit', 'links',
-        'lives', 'local', 'logic', 'loose', 'lower',
-        'lucky', 'lunch', 'lying', 'magic', 'major',
-        'maker', 'march', 'maria', 'marry', 'match',
-        'maybe',
-        'mayor', 'meant', 'media', 'metal', 'might',
-        'minor', 'minus', 'mixed', 'model', 'money',
-        'month', 'moral', 'motor', 'mount', 'mouse',
-        'mouth', 'movie', 'music', 'needs', 'never',
-        'night', 'noise', 'north', 'noted', 'novel',
-        'nurse', 'oasis', 'occur', 'ocean', 'offer',
-        'often', 'older', 'olive', 'omega', 'opera',
-        'order', 'other', 'ought', 'paint', 'panel',
-        'paper', 'party', 'paste', 'patch', 'peace',
-        'peter',
-        'phase',
-        'phone', 'photo', 'piece', 'pilot', 'pinky',
-        'pitch',
-        'place', 'plain', 'plane', 'plant', 'plate',
-        'point', 'pound', 'power', 'press', 'price',
-        'pride', 'prime', 'print', 'prior', 'prize',
-        'proof', 'proud', 'prove', 'queen', 'quick',
-        'quiet', 'quite', 'radio', 'raise', 'range',
-        'rapid', 'ratio', 'reach', 'ready', 'refer',
-        'relay', 'reset',
-        'right', 'rival', 'river', 'robin', 'roger',
-        'roman', 'rough', 'round', 'route', 'royal',
-        'rural', 'scale', 'scene', 'score', 'sense',
-        'serve', 'seven', 'shall', 'shape', 'share',
-        'sharp', 'sheet', 'shelf', 'shell', 'shift',
-        'shirt', 'shock', 'shoot', 'short', 'shown',
-        'sight', 'since', 'sixth', 'sized', 'skill',
-        'slide', 'small', 'smart', 'smith', 'smoke',
-        'solid', 'solve', 'sorry', 'sound', 'south',
-        'space', 'spare', 'speak', 'speed', 'spend',
-        'spent', 'spoil', 'spoke', 'sport', 'staff',
-        'stage',
-        'stake', 'start', 'state', 'steam', 'steel',
-        'stick', 'still', 'stock', 'stone', 'stood',
-        'store', 'storm', 'story', 'strip', 'stuck',
-        'study', 'stuff', 'style', 'sugar', 'suite',
-        'super', 'sweet', 'table', 'taken', 'taste',
-        'teach', 'teeth', 'terry', 'texas', 'thank',
-        'theft', 'their', 'theme', 'there', 'these',
-        'thick', 'thing', 'think', 'third', 'those',
-        'three', 'threw', 'throw', 'tight', 'times',
-        'tired', 'title', 'today', 'token', 'topic',
-        'total',
-        'touch', 'tower', 'track', 'trade', 'train',
-        'trend', 'trial', 'tried', 'tries', 'truck',
-        'truly', 'trust', 'truth', 'twice', 'under',
-        'undue', 'union', 'unity', 'until', 'upper',
-        'upset', 'urban', 'usage', 'usual', 'valid',
-        'value', 'video', 'virus', 'visit', 'vital',
-        'voice', 'waste', 'watch', 'water', 'wheel',
-        'where', 'which', 'while', 'white', 'whole',
-        'whose', 'woman', 'women', 'world', 'worry',
-        'worse', 'worst', 'worth', 'would', 'wound',
-        'write', 'wrong'
-    ];
 
     const unwantedKeys = [
         'CapsLock', 'Shift', 'Control', 'Alt', 'Tab', 'Space', 'ArrowLeft', 'ArrowRight',
@@ -501,20 +388,14 @@ const Board = () => {
      * @param {number[]} greenIndexes - the indexes of green characters
      * @return {number[]} the indexes of yellow characters
      */
-    const findYellowIndexes = (word: string, greenIndexes: number[]): number[] => {
-        const allIndexes = Array.from({ length: word.length }, (_, index) => index);
-
-        const missingIndexes = allIndexes.filter(index => !greenIndexes.includes(index));
-
-        const indexesToLetters = missingIndexes.map(index => word[index]);
-
-        const yellowIndexes: number[] = [];
+    const findYellowIndexes = (tempWordle: string[]): number[] => {const yellowIndexes: number[] = [];
         for (let i = 0; i < wordle.value.length; i++) {
-            if (wordle.value.includes(indexesToLetters[i])) {
-                yellowIndexes.push(missingIndexes[i]);
+            if (tempWordle.includes(userGuess.value[i])) {
+                yellowIndexes.push(i);
+                tempWordle[i] = '';
+                userGuess.value[i] = '';
             }
         }
-
         return yellowIndexes;
     };
 
@@ -523,11 +404,13 @@ const Board = () => {
      *
      * @return {number[]} array of indexes of matching characters
      */
-    const findGreenIndexes = (): number[] => {
+    const findGreenIndexes = (tempWordle: string[]): number[] => {
         const greenIndexes: number[] = [];
-        for (let i = 0; i < wordle.value.length; i++) {
-            if (wordle.value[i] === userGuess.value[i]) {
+        for (let i = 0; i < tempWordle.length; i++) {
+            if (tempWordle[i] === userGuess.value[i]) {
                 greenIndexes.push(i);
+                tempWordle[i] = '';
+                userGuess.value[i] = '';
             }
         }
         return greenIndexes;
@@ -593,8 +476,9 @@ const Board = () => {
         }
 
         // Check if the user's guess is correct
-        const greenIndexes = findGreenIndexes();
-        const yellowIndexes = findYellowIndexes(userGuess.value.join(''), greenIndexes);
+        const tempWordle = [...wordle.value];
+        const greenIndexes = findGreenIndexes(tempWordle);
+        const yellowIndexes = findYellowIndexes(tempWordle);
 
         // Create new input values
         const newInputValues: InputValues = { ...inputValues.value };
