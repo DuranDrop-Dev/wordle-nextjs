@@ -32,6 +32,6 @@ export async function GET(request: NextRequest, { params }: RouteContext) {
         return NextResponse.json({
             success: false,
             error: 'Internal Server Error'
-        });
+        }, { status: 500 });
     }
 }

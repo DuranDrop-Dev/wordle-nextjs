@@ -31,7 +31,7 @@ export async function GET(request: NextRequest, { params }: RouteContext) {
         return NextResponse.json({
             success: false,
             error: 'Internal Server Error'
-        });
+        }, { status: 500 });
     }
 }
 
@@ -81,7 +81,7 @@ export async function PUT(nextReq: NextRequest, { params }: RouteContext) {
         return NextResponse.json({
             success: false,
             error: 'Internal Server Error'
-        });
+        }, { status: 500 });
     }
 }
 
@@ -144,6 +144,6 @@ export async function POST(nextReq: NextRequest, { params }: RouteContext) {
         return NextResponse.json({
             success: false,
             error: 'Internal Server Error'
-        });
+        }, { status: 500 });
     }
 }

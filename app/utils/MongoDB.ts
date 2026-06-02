@@ -1,42 +1,43 @@
 import mongoose, { ConnectOptions } from 'mongoose';
-import cors from 'cors';
-import express from 'express';
 
-// Define global variables for express
-(global as any).app = express();
-(global as any).app.use(cors());
+type MongooseCache = {
+   conn: typeof mongoose | null;
+   promise: Promise<typeof mongoose> | null;
+};
 
-// Define global variables for mongoose connection
-(global as any).mongoose = {
+const globalWithMongoose = global as typeof globalThis & {
+   mongooseCache?: MongooseCache;
+};
+
+const cached = globalWithMongoose.mongooseCache ?? {
    conn: null,
    promise: null,
 };
 
+globalWithMongoose.mongooseCache = cached;
+
 export async function dbConnect() {
-   if ((global as any).mongoose.conn) {
-      console.log("Already connected");
-      return (global as any).mongoose.conn;
+   if (cached.conn) {
+      return cached.conn;
    }
 
    const conString = process.env.MONGODB_URI;
 
    if (!conString) {
-      throw new Error("MONGO_URI environment variable is not defined");
+      throw new Error("MONGODB_URI environment variable is not defined");
    }
 
    const options: ConnectOptions = {
       autoIndex: true,
+      serverSelectionTimeoutMS: 10000,
    };
 
    try {
-      const promise = mongoose.connect(conString, options);
-      (global as any).mongoose = {
-         conn: await promise,
-         promise,
-      };
-      console.log("Newly connected");
-      return promise;
+      cached.promise ??= mongoose.connect(conString, options);
+      cached.conn = await cached.promise;
+      return cached.conn;
    } catch (error) {
+      cached.promise = null;
       console.error("Error connecting to MongoDB:", error);
       throw error;
    }
