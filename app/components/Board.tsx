@@ -4,7 +4,7 @@ import { isStarted, rowTurn, wordle, userGuess, inputValues, statsSignal } from 
 import { InputValues, UserPayload } from '../utils/Types';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../utils/Firebase';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { getStats, putStats } from '../utils/REST';
 import { wordleDictionary } from '../utils/WordleDictionary';
 
@@ -35,6 +35,37 @@ const Board = () => {
         '|', '-', '+', '<', '>', '?', '/', '`', '~', '=', "'", '"', "|", "\\", 'Clear'
     ];
 
+    const loadUserStats = useCallback(async (showLoading = false): Promise<void> => {
+        if (!user) {
+            statsSignal.value = { totalWins: 0, totalLosses: 0 };
+            setStats(statsSignal.value);
+            return;
+        }
+
+        if (showLoading) {
+            setStatsLoading(true);
+        }
+
+        try {
+            const data = await getStats({ userUID: user.uid });
+
+            if (data && !Array.isArray(data) && typeof data === 'object') {
+                statsSignal.value = data;
+                setStats(data);
+            } else {
+                console.error('Invalid stats data received:', data);
+            }
+        } finally {
+            if (showLoading) {
+                setStatsLoading(false);
+            }
+        }
+    }, [user]);
+
+    useEffect(() => {
+        loadUserStats(start);
+    }, [loadUserStats, start]);
+
     /**
      * Set the input values to the default values and start the game
      */
@@ -55,20 +86,7 @@ const Board = () => {
 
         // Set Stats state
         if (user) {
-            setStatsLoading(true);
-
-            try {
-                const data = await getStats({ userUID: user.uid });
-
-                if (data && !Array.isArray(data) && typeof data === 'object') {
-                    statsSignal.value = data;
-                    setStats(data);
-                } else {
-                    console.error('Invalid stats data received:', data);
-                }
-            } finally {
-                setStatsLoading(false);
-            }
+            await loadUserStats(true);
         }
 
         // Focus the first cell

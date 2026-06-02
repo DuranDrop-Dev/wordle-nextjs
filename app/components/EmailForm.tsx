@@ -6,8 +6,9 @@ import { createNewStats } from '../utils/REST';
 
 interface EmailFormProps {
     isChecked: boolean;
+    onAccountMessage: (message: string | null) => void;
 }
-const EmailForm = ({ isChecked }: EmailFormProps) => {
+const EmailForm = ({ isChecked, onAccountMessage }: EmailFormProps) => {
     // Firebase method
     const auth = getAuth();
 
@@ -47,11 +48,12 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
     const EmailSignUp = (data: { email: string; password: string; }) => {
         try {
             createUserWithEmailAndPassword(auth, data.email, data.password)
-                .then((userCredential) => {
+                .then(async (userCredential) => {
                     const user = userCredential.user;
                     console.log("Email User Created:", user.email)
                     if (!user) return;
-                    createNewStats({ userID: user.uid, email: user.email as string });
+                    const message = await createNewStats({ userID: user.uid, email: user.email as string });
+                    onAccountMessage(message);
                 })
                 .catch((error) => {
                     const errorCode = error.code;

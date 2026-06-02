@@ -94,8 +94,9 @@ export const createNewStats = async ({ userID, email }: PostRequest) => {
 
         const results = await response.json();
 
-        alert(results);
+        return results as string;
     } catch (error) {
         console.error('Error putting stats: ', error);
+        return null;
     }
 }

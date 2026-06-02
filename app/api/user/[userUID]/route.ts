@@ -115,7 +115,7 @@ export async function POST(nextReq: NextRequest, { params }: RouteContext) {
         }
 
         // Check if the user already exists
-        const currentUser = await UserDB.findOne({ userID: userUID });
+        const currentUser = await UserDB.findOne({ userUID });
 
         if (currentUser) {
             // If user exists, cancel the operation without sending back a response

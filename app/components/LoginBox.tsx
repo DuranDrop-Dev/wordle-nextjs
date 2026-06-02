@@ -16,16 +16,27 @@ const LoginBox = () => {
     const [initialRender, setInitialRender] = useState(true);
     const [displayUserName, setDisplayUserName] = useState("Guest");
     const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+    const [accountMessage, setAccountMessage] = useState("");
     const [user, loading, error] = useAuthState(auth);
     const router = useRouter();
     const googleProvider = new GoogleAuthProvider();
 
+    const showAccountMessage = (message: string | null) => {
+        if (!message) return;
+
+        setAccountMessage(message);
+        window.setTimeout(() => {
+            setAccountMessage("");
+        }, 3500);
+    };
+
     const GoogleLogin = async () => {
         try {
-            await signInWithPopup(auth, googleProvider);
+            const result = await signInWithPopup(auth, googleProvider);
             console.log("GoogleLogin Result Received");
-            if (!user) return;
-            createNewStats({ userID: user.uid, email: user.email as string });
+            if (!result.user?.email) return;
+            const message = await createNewStats({ userID: result.user.uid, email: result.user.email });
+            showAccountMessage(message);
         } catch (error) {
             console.log("GoogleLogin Error:", error);
         }
@@ -125,6 +136,12 @@ const LoginBox = () => {
             </div>
 
             <div className="flex flex-col gap-6 rounded-md border-2 border-slate-900 bg-gray-950 p-6 shadow-2xl shadow-black/30">
+                {accountMessage &&
+                    <div className="animate-pulse rounded-md border border-green-300 bg-green-400/10 px-4 py-3 text-center text-sm font-black uppercase tracking-[0.18em] text-green-300">
+                        {accountMessage}
+                    </div>
+                }
+
                 <label className="flex items-start gap-3 text-sm leading-6 text-gray-300">
                     <input
                         checked={isChecked}
@@ -160,7 +177,7 @@ const LoginBox = () => {
                 </div>
 
                 <div className="border-t border-gray-800 pt-6">
-                    <EmailForm isChecked={isChecked} />
+                    <EmailForm isChecked={isChecked} onAccountMessage={showAccountMessage} />
                 </div>
             </div>
         </div>

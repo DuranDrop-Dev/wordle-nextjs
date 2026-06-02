@@ -29,6 +29,16 @@ const Menu = () => {
         router.push('/login');
     }
 
+    const handleTermsClick = () => {
+        setIsOpen(!isOpen);
+        router.push('/terms');
+    }
+
+    const handlePrivacyClick = () => {
+        setIsOpen(!isOpen);
+        router.push('/privacy-policy');
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             if (!user) return;
@@ -93,6 +103,20 @@ const Menu = () => {
                         onClick={handleLoginClick}
                         className='w-full py-2 px-0 font-bold text-white bg-gray-950 border-b border-gray-800 pl-2 hover: cursor-pointer'>
                         Login
+                    </li>
+                </ul>
+                <ul>
+                    <li
+                        onClick={handleTermsClick}
+                        className='w-full py-2 px-0 font-bold text-white bg-gray-950 border-b border-gray-800 pl-2 hover: cursor-pointer'>
+                        Terms & Conditions
+                    </li>
+                </ul>
+                <ul>
+                    <li
+                        onClick={handlePrivacyClick}
+                        className='w-full py-2 px-0 font-bold text-white bg-gray-950 border-b border-gray-800 pl-2 hover: cursor-pointer'>
+                        Privacy Policy
                     </li>
                 </ul>
                 <ul>
