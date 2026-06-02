@@ -22,6 +22,7 @@ const Board = () => {
     const [stateInputValues, setStateInputValues] = useState(inputValues.value);
     const [nextCellString, setNextCellString] = useState("");
     const [stats, setStats] = useState<UserPayload>(statsSignal.value);
+    const [statsLoading, setStatsLoading] = useState(false);
     const [user] = useAuthState(auth);
 
     const unwantedKeys = [
@@ -54,13 +55,19 @@ const Board = () => {
 
         // Set Stats state
         if (user) {
-            const data = await getStats({ userUID: user.uid });
+            setStatsLoading(true);
 
-            if (data && !Array.isArray(data) && typeof data === 'object') {
-                statsSignal.value = data;
-                setStats(data);
-            } else {
-                console.error('Invalid stats data received:', data);
+            try {
+                const data = await getStats({ userUID: user.uid });
+
+                if (data && !Array.isArray(data) && typeof data === 'object') {
+                    statsSignal.value = data;
+                    setStats(data);
+                } else {
+                    console.error('Invalid stats data received:', data);
+                }
+            } finally {
+                setStatsLoading(false);
             }
         }
 
@@ -516,94 +523,163 @@ const Board = () => {
     }
 
     return (
-        <div className='flex flex-col justify-center items-center mt-20'>
+        <div className='flex flex-col justify-center items-center mt-20 px-4'>
             {start &&
-                <div className="flex max-w-screen-md mx-auto flex-col justify-center items-center">
-                    {Array.from({ length: BOARD_ROWS }).map((_, rowIndex) => (
-                        <div
-                            className={isBoardSelected(rowIndex + 1) ? "flex flex-row border border-slate-400" : "flex flex-initial"}
-                            id={`row-${rowIndex + 1}`}
-                            key={`row-${rowIndex + 1}`}
-                        >
-                            {Array.from({ length: CELL_PER_ROW }).map((_, cellIndex) => {
-                                const cellKey = `cell-${rowIndex * CELL_PER_ROW + cellIndex + 1}`;
+                <div className="grid w-full max-w-5xl items-start gap-10 py-6 md:grid-cols-[1fr_260px]">
+                    <div className="flex flex-col items-center">
+                        <p className="mb-5 text-sm font-bold uppercase tracking-[0.24em] text-green-300">Current puzzle</p>
+                        <div className="flex flex-col items-center">
+                            {Array.from({ length: BOARD_ROWS }).map((_, rowIndex) => (
+                                <div
+                                    className={isBoardSelected(rowIndex + 1) ? "flex flex-row border border-slate-400" : "flex flex-initial"}
+                                    id={`row-${rowIndex + 1}`}
+                                    key={`row-${rowIndex + 1}`}
+                                >
+                                    {Array.from({ length: CELL_PER_ROW }).map((_, cellIndex) => {
+                                        const cellKey = `cell-${rowIndex * CELL_PER_ROW + cellIndex + 1}`;
 
-                                return (
-                                    <input
-                                        type="text"
-                                        autoComplete="off"
-                                        className={
-                                            isLetterGreen(rowIndex + 1, cellIndex + 1)
-                                                ? `text-xl font-bold text-center m-1 rounded-md
+                                        return (
+                                            <input
+                                                type="text"
+                                                autoComplete="off"
+                                                className={
+                                                    isLetterGreen(rowIndex + 1, cellIndex + 1)
+                                                        ? `text-xl font-bold text-center m-1 rounded-md
                                            text-white bg-green-500 border border-gray-700 
                                            flex items-center justify-center capitalize 
                                            sm:w-20 sm:h-20 w-16 h-16 transition-all ease-in-out 
                                            disabled:opacity-90 disabled:cursor-not-allowed`
-                                                : isLetterYellow(rowIndex + 1, cellIndex + 1)
-                                                    ? `text-xl font-bold text-center m-1 rounded-md 
+                                                        : isLetterYellow(rowIndex + 1, cellIndex + 1)
+                                                            ? `text-xl font-bold text-center m-1 rounded-md 
                                             text-white bg-yellow-500 border border-gray-700 
                                             flex items-center justify-center capitalize 
                                             sm:w-20 sm:h-20 w-16 h-16 transition-all ease-in-out 
                                             disabled:opacity-90 disabled:cursor-not-allowed`
-                                                    : `sm:w-20 sm:h-20 w-16 h-16 text-xl font-bold text-center m-1 rounded-md 
+                                                            : `sm:w-20 sm:h-20 w-16 h-16 text-xl font-bold text-center m-1 rounded-md 
                                             text-white bg-gray-900 border border-gray-700 
                                             items-center justify-center capitalize 
                                             transition-all ease-in-out 
                                             disabled:opacity-90 disabled:cursor-not-allowed 
                                             focus:border-green-200 selection:border-green-200`
-                                        }
-                                        onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => handleKeyDown(event, rowIndex + 1, cellIndex + 1)}
-                                        disabled={isRowDisabled(rowIndex + 1)}
-                                        maxLength={1}
-                                        id={cellKey}
-                                        key={cellKey}
-                                        value={stateInputValues[cellKey].value}
-                                        onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                                            const target = event.target as HTMLInputElement;
-                                            target?.select();
-                                        }}
-                                    />
-                                );
-                            })}
+                                                }
+                                                onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => handleKeyDown(event, rowIndex + 1, cellIndex + 1)}
+                                                disabled={isRowDisabled(rowIndex + 1)}
+                                                maxLength={1}
+                                                id={cellKey}
+                                                key={cellKey}
+                                                value={stateInputValues[cellKey].value}
+                                                onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                                                    const target = event.target as HTMLInputElement;
+                                                    target?.select();
+                                                }}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            ))}
                         </div>
-                    ))}
 
-                    {start && <button className={btnString} onClick={handleSubmit}>Submit</button>}
-                    
-                    {user &&
-                        <div className="flex flex-col gap-2 m-7">
-                            <table className="border-collapse border-2 border-gray-500">
-                                <thead>
-                                    <tr>
-                                        <th className="border border-gray-500 px-4 py-2">RECORD</th>
-                                        <th className="border border-gray-500 px-4 py-2">SCORE</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {Object.entries(stats).map(([key, value]) => (
-                                        <tr key={key}>
-                                            <td className="border border-gray-500 px-4 py-2">{key === 'totalWins' ? 'Wins' : 'Losses'}</td>
-                                            <td className="border border-gray-500 px-4 py-2">{value}</td>
+                        <button
+                            className="mt-6 rounded-md border border-green-300 bg-green-400 px-7 py-3 text-base font-black text-black shadow-[0_10px_30px_rgba(74,222,128,0.18)] transition-all ease-in-out hover:-translate-y-0.5 hover:bg-white"
+                            onClick={handleSubmit}
+                        >
+                            Submit
+                        </button>
+                    </div>
+
+                    <div className="flex flex-col items-center gap-4 text-center md:items-stretch md:text-left">
+                        <p className="text-sm font-bold uppercase tracking-[0.24em] text-green-300">Stats</p>
+                        {user &&
+                            <table className="w-full border-collapse overflow-hidden rounded-md border-2 border-gray-700 bg-gray-950">
+                                    <thead>
+                                        <tr>
+                                            <th className="border border-gray-700 px-4 py-3 text-left text-xs tracking-[0.18em] text-gray-300">RECORD</th>
+                                            <th className="border border-gray-700 px-4 py-3 text-left text-xs tracking-[0.18em] text-gray-300">SCORE</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    }
+                                    </thead>
+                                    <tbody>
+                                        {statsLoading && (
+                                            <tr>
+                                                <td colSpan={2} className="border border-gray-700 px-4 py-8">
+                                                    <div className="flex items-center justify-center">
+                                                        <div
+                                                            className="h-8 w-8 animate-spin rounded-full border-4 border-gray-600 border-t-white"
+                                                            aria-label="Loading stats"
+                                                            role="status"
+                                                        />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )}
+                                        {!statsLoading && Object.entries(stats).map(([key, value]) => (
+                                            <tr key={key}>
+                                                <td className="border border-gray-700 px-4 py-3">{key === 'totalWins' ? 'Wins' : 'Losses'}</td>
+                                                <td className="border border-gray-700 px-4 py-3 font-black">{value}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                        }
 
-                    {!user &&
-                        <div className="flex flex-col gap-2 m-7">
-                            <p className="text-center">*Create an account or login to see stats!</p>
-                        </div>
-                    }
+                        {!user &&
+                            <p className="max-w-[240px] text-sm leading-6 text-gray-300">*Create an account or login to see stats!</p>
+                        }
+                    </div>
 
                 </div>
             }
             {!start &&
-                <div className="flex flex-col items-center gap-5 m-3 bg-gray-950 border-2 border-slate-900 p-8 rounded-md max-w-2xl">
-                    <h1 className="font-bold text-3xl text-center m-6">5 Letter Word Guessing Game</h1>
-                    <button className={btnString} onClick={handleStart}>Play Now</button>
-                    <i className="text-center">*I am not the creator of this game, this is my interpretation of the game written in NextJS.</i>
+                <div className="grid w-full max-w-5xl items-center gap-10 py-10 md:grid-cols-[1fr_360px] md:py-16">
+                    <div className="flex flex-col items-center text-center md:items-start md:text-left">
+                        <p className="mb-4 text-sm font-bold uppercase tracking-[0.24em] text-green-300">Daily word puzzle</p>
+                        <h1 className="max-w-2xl text-5xl font-black leading-tight sm:text-6xl">
+                            5 Letter Word Guessing Game
+                        </h1>
+                        <p className="mt-5 max-w-xl text-base leading-7 text-gray-300 sm:text-lg">
+                            A clean, fast Wordle-style board with account stats saved between rounds.
+                        </p>
+                        <button
+                            className="mt-8 rounded-md border border-green-300 bg-green-400 px-7 py-3 text-base font-black text-black shadow-[0_10px_30px_rgba(74,222,128,0.18)] transition-all ease-in-out hover:-translate-y-0.5 hover:bg-white"
+                            onClick={handleStart}
+                        >
+                            Play Now
+                        </button>
+                    </div>
+
+                    <div className="mx-auto grid w-full max-w-[320px] grid-cols-5 gap-2" aria-hidden="true">
+                        {["W", "O", "R", "D", "S"].map((letter, index) => (
+                            <div
+                                className={`flex aspect-square items-center justify-center rounded-md border text-2xl font-black shadow-lg ${
+                                    index === 0 || index === 3
+                                        ? "border-green-400 bg-green-500 text-white shadow-green-950/40"
+                                        : index === 1
+                                            ? "border-yellow-300 bg-yellow-400 text-black shadow-yellow-950/30"
+                                            : "border-gray-600 bg-gray-900 text-white shadow-black/30"
+                                }`}
+                                key={`hero-tile-${letter}`}
+                            >
+                                {letter}
+                            </div>
+                        ))}
+                        {Array.from({ length: 20 }).map((_, index) => (
+                            <div
+                                className={`aspect-square rounded-md border ${
+                                    index % 7 === 0
+                                        ? "border-green-500 bg-green-600/80"
+                                        : index % 5 === 0
+                                            ? "border-yellow-400 bg-yellow-500/80"
+                                            : "border-gray-700 bg-gray-950"
+                                }`}
+                                key={`hero-empty-tile-${index}`}
+                            />
+                        ))}
+                    </div>
+
+                    <div className="md:col-span-2">
+                        <p className="mx-auto max-w-2xl text-center text-xs italic text-gray-400">
+                            *I am not the creator of this game, this is my interpretation of the game written in NextJS.
+                        </p>
+                    </div>
                 </div>
             }
         </div>

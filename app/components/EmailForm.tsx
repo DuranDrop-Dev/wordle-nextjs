@@ -93,19 +93,15 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
     }
 
     return (
-        <>
+        <div className="flex flex-col items-center gap-4">
             {showEmail &&
                 <>
-                    <h3 className='text-xl bold-font'>Login with Email</h3>
+                    <h3 className='text-sm font-bold uppercase tracking-[0.24em] text-green-300'>Email</h3>
                     <button
-                        className="p-1 pl-3 pr-3 
-                        bg-white text-black border border-white
-                        rounded-3xl font-bold  
-                        hover:bg-black hover:text-white 
-                        transition-all ease-in-out disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-black"
+                        className="rounded-md border border-white bg-white px-7 py-3 text-base font-black text-black transition-all ease-in-out hover:-translate-y-0.5 hover:bg-black hover:text-white disabled:opacity-30 disabled:hover:translate-y-0 disabled:hover:bg-white disabled:hover:text-black"
                         disabled={!isChecked}
                         onClick={showEmailForms}>
-                        Email
+                        Continue with Email
                     </button>
                 </>
             }
@@ -113,14 +109,14 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
                 <>
                     {toggleLoginSignup &&
                         <>
-                            <h3 className='text-xl bold-font'>Login with Email</h3>
+                            <h3 className='text-sm font-bold uppercase tracking-[0.24em] text-green-300'>Email login</h3>
                             <form
-                                className='flex flex-col items-center gap-3 rounded-3xl p-4'
+                                className='flex w-full flex-col items-stretch gap-4'
                                 onSubmit={handleLoginBtn}>
-                                <div className='flex flex-col items-center'>
-                                    <label htmlFor="email">Email:</label>
+                                <div className='flex flex-col gap-2'>
+                                    <label className="text-sm font-bold text-gray-300" htmlFor="email">Email</label>
                                     <input
-                                        className='text-white p-1 px-3 rounded-3xl bg-slate-700 text-left w-auto'
+                                        className='w-full rounded-md border border-gray-700 bg-gray-900 px-4 py-3 text-left text-white outline-none transition-all focus:border-green-300'
                                         autoComplete="email"
                                         type="email"
                                         id="email"
@@ -129,10 +125,10 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                                <div className='flex flex-col items-center'>
-                                    <label htmlFor="password">Password:</label>
+                                <div className='flex flex-col gap-2'>
+                                    <label className="text-sm font-bold text-gray-300" htmlFor="password">Password</label>
                                     <input
-                                        className='text-white p-1 px-3 rounded-3xl bg-slate-700 text-left w-auto'
+                                        className='w-full rounded-md border border-gray-700 bg-gray-900 px-4 py-3 text-left text-white outline-none transition-all focus:border-green-300'
                                         autoComplete="current-password"
                                         type="password"
                                         id="password"
@@ -142,16 +138,13 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
                                     />
                                 </div>
                                 <button
-                                    className="p-1 pl-3 pr-3 
-                                    bg-white text-black border border-white
-                                    rounded-3xl font-bold  
-                                    hover:bg-black hover:text-white 
-                                    transition-all ease-in-out"
+                                    className="rounded-md border border-green-300 bg-green-400 px-7 py-3 text-base font-black text-black shadow-[0_10px_30px_rgba(74,222,128,0.18)] transition-all ease-in-out hover:-translate-y-0.5 hover:bg-white"
                                     type="submit">
                                     Login
                                 </button>
                                 <button
-                                    className='p-1 pl-3 pr-3 text-purple-700'
+                                    className='px-3 py-1 text-sm font-bold text-green-300 transition-colors hover:text-white'
+                                    type="button"
                                     onClick={showLoginSignup}>
                                     Create an account
                                 </button>
@@ -161,15 +154,15 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
 
                     {!toggleLoginSignup &&
                         <>
-                            <h3 className='text-xl bold-font'>Create an Account</h3>
+                            <h3 className='text-sm font-bold uppercase tracking-[0.24em] text-green-300'>Create account</h3>
                             <form
-                                className='flex flex-col items-center gap-3 rounded-3xl p-4 w-full'
+                                className='flex w-full flex-col items-stretch gap-4'
                                 onSubmit={handleSignUpBtn}
                             >
-                                <div className='flex flex-col items-center'>
-                                    <label htmlFor="email">Email:</label>
+                                <div className='flex flex-col gap-2'>
+                                    <label className="text-sm font-bold text-gray-300" htmlFor="email">Email</label>
                                     <input
-                                        className='text-white p-1 px-3 rounded-3xl bg-slate-700 text-left w-auto'
+                                        className='w-full rounded-md border border-gray-700 bg-gray-900 px-4 py-3 text-left text-white outline-none transition-all focus:border-green-300'
                                         autoComplete="email"
                                         type="email"
                                         id="email"
@@ -178,10 +171,10 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
                                         onChange={handleChange}
                                     />
                                 </div>
-                                <div className='flex flex-col items-center'>
-                                    <label htmlFor="password">Password:</label>
+                                <div className='flex flex-col gap-2'>
+                                    <label className="text-sm font-bold text-gray-300" htmlFor="password">Password</label>
                                     <input
-                                        className='text-white p-1 px-3 rounded-3xl bg-slate-700 text-left w-auto'
+                                        className='w-full rounded-md border border-gray-700 bg-gray-900 px-4 py-3 text-left text-white outline-none transition-all focus:border-green-300'
                                         autoComplete="new-password"
                                         type="password"
                                         id="password"
@@ -191,16 +184,13 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
                                     />
                                 </div>
                                 <button
-                                    className="p-1 pl-3 pr-3 
-                                    bg-white text-black border border-white
-                                    rounded-3xl font-bold  
-                                    hover:bg-black hover:text-white 
-                                    transition-all ease-in-out"
+                                    className="rounded-md border border-green-300 bg-green-400 px-7 py-3 text-base font-black text-black shadow-[0_10px_30px_rgba(74,222,128,0.18)] transition-all ease-in-out hover:-translate-y-0.5 hover:bg-white"
                                     type="submit">
-                                    SignUp
+                                    Sign Up
                                 </button>
                                 <button
-                                    className='p-1 pl-3 pr-3 text-purple-700'
+                                    className='px-3 py-1 text-sm font-bold text-green-300 transition-colors hover:text-white'
+                                    type="button"
                                     onClick={showLoginSignup}>
                                     Back to login
                                 </button>
@@ -209,7 +199,7 @@ const EmailForm = ({ isChecked }: EmailFormProps) => {
                     }
                 </>
             }
-        </>
+        </div>
     );
 }
 
