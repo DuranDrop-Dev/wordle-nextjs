@@ -3,13 +3,19 @@ import { dbConnect } from "../../../utils/MongoDB";
 import { PutRequest, PostRequest } from "../../../utils/Types";
 import UserDB from "../../../utils/User";
 
-export async function GET(request: Request, { params }: { params: { userUID: string } }) {
+type RouteContext = {
+    params: Promise<{ userUID: string }>;
+};
+
+export async function GET(request: NextRequest, { params }: RouteContext) {
     try {
+        const { userUID } = await params;
+
         // Establishing database connection
         await dbConnect();
 
         // Finding admin data based on userUID
-        const statsData = await UserDB.findOne({ userUID: params.userUID }, { _id: 0, __v: 0, email:0, userID: 0, dateCreated: 0, admin:0, userUID: 0});
+        const statsData = await UserDB.findOne({ userUID }, { _id: 0, __v: 0, email:0, userID: 0, dateCreated: 0, admin:0, userUID: 0});
 
         // Check if the blog post exists
         if (!statsData) {
@@ -29,8 +35,10 @@ export async function GET(request: Request, { params }: { params: { userUID: str
     }
 }
 
-export async function PUT(nextReq: NextRequest, { params }: { params: { userUID: string } }) {
+export async function PUT(nextReq: NextRequest, { params }: RouteContext) {
     try {
+        const { userUID } = await params;
+
         // Establishing database connection
         await dbConnect();
 
@@ -60,7 +68,7 @@ export async function PUT(nextReq: NextRequest, { params }: { params: { userUID:
         const totalLosses = body?.body?.totalLosses ?? 0;
 
         // Update the user stats in the database
-        const result = await UserDB.updateOne({ userUID: params.userUID }, { $set: { totalWins: totalWins, totalLosses: totalLosses } });
+        const result = await UserDB.updateOne({ userUID }, { $set: { totalWins: totalWins, totalLosses: totalLosses } });
 
         console.log("Result: ", result);
 
@@ -77,8 +85,10 @@ export async function PUT(nextReq: NextRequest, { params }: { params: { userUID:
     }
 }
 
-export async function POST(nextReq: NextRequest, { params }: { params: { userUID: string } }) {
+export async function POST(nextReq: NextRequest, { params }: RouteContext) {
     try {
+        const { userUID } = await params;
+
         // Establishing database connection
         await dbConnect();
 
@@ -105,7 +115,7 @@ export async function POST(nextReq: NextRequest, { params }: { params: { userUID
         }
 
         // Check if the user already exists
-        const currentUser = await UserDB.findOne({ userID: params.userUID });
+        const currentUser = await UserDB.findOne({ userID: userUID });
 
         if (currentUser) {
             // If user exists, cancel the operation without sending back a response
@@ -116,7 +126,7 @@ export async function POST(nextReq: NextRequest, { params }: { params: { userUID
 
         // Create a new user in the database
         await UserDB.create({ 
-            userUID: params.userUID.toString(), 
+            userUID: userUID.toString(), 
             email: body.email.toString(), 
             dateCreated: new Date(), 
             admin: false, 

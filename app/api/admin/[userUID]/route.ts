@@ -1,15 +1,21 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "../../../utils/MongoDB";
 import UserDB from "../../../utils/User";
 
-export async function GET(request: Request, { params }: { params: { userUID: string } }) {
+type RouteContext = {
+    params: Promise<{ userUID: string }>;
+};
+
+export async function GET(request: NextRequest, { params }: RouteContext) {
     try {
+        const { userUID } = await params;
+
         // Establishing database connection
         await dbConnect();
 
         // Ensure you have an index on the 'userUID' field for optimal performance
         const adminData = await UserDB.find(
-            {userUID: params.userUID},
+            { userUID },
             { _id: 0, __v: 0, email: 0, userID: 0, dateCreated: 0, totalWins: 0, totalLosses: 0, userUID: 0 }
         );
 
