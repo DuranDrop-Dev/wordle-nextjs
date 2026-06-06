@@ -26,6 +26,56 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+.particle-field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.particle-dot {
+  position: absolute;
+  bottom: -1rem;
+  left: var(--particle-left);
+  width: var(--particle-size);
+  height: var(--particle-size);
+  border-radius: 9999px;
+  background: white;
+  opacity: 0;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.28);
+  animation: particle-rise var(--particle-duration) linear infinite;
+  animation-delay: var(--particle-delay);
+  will-change: transform, opacity;
+}
+
+@keyframes particle-rise {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.75);
+  }
+
+  12% {
+    opacity: var(--particle-opacity);
+  }
+
+  88% {
+    opacity: var(--particle-opacity);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--particle-drift), -110vh, 0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .particle-dot {
+    animation: none;
+    opacity: 0.12;
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

@@ -563,18 +563,18 @@ const Board = () => {
                                                 className={
                                                     isLetterGreen(rowIndex + 1, cellIndex + 1)
                                                         ? `text-xl font-bold text-center m-1 rounded-md
-                                           text-white bg-green-500 border border-gray-700 
+                                           text-white bg-green-500/90 border border-gray-700 backdrop-blur-sm
                                            flex items-center justify-center capitalize 
                                            sm:w-20 sm:h-20 w-16 h-16 transition-all ease-in-out 
                                            disabled:opacity-90 disabled:cursor-not-allowed`
                                                         : isLetterYellow(rowIndex + 1, cellIndex + 1)
                                                             ? `text-xl font-bold text-center m-1 rounded-md 
-                                            text-white bg-yellow-500 border border-gray-700 
+                                            text-white bg-yellow-500/90 border border-gray-700 backdrop-blur-sm
                                             flex items-center justify-center capitalize 
                                             sm:w-20 sm:h-20 w-16 h-16 transition-all ease-in-out 
                                             disabled:opacity-90 disabled:cursor-not-allowed`
                                                             : `sm:w-20 sm:h-20 w-16 h-16 text-xl font-bold text-center m-1 rounded-md 
-                                            text-white bg-gray-900 border border-gray-700 
+                                            text-white bg-gray-900/70 border border-gray-700 backdrop-blur-sm
                                             items-center justify-center capitalize 
                                             transition-all ease-in-out 
                                             disabled:opacity-90 disabled:cursor-not-allowed 
@@ -669,10 +669,10 @@ const Board = () => {
                             <div
                                 className={`flex aspect-square items-center justify-center rounded-md border text-2xl font-black shadow-lg ${
                                     index === 0 || index === 3
-                                        ? "border-green-400 bg-green-500 text-white shadow-green-950/40"
+                                        ? "border-green-400 bg-green-500/90 text-white backdrop-blur-sm shadow-green-950/40"
                                         : index === 1
-                                            ? "border-yellow-300 bg-yellow-400 text-black shadow-yellow-950/30"
-                                            : "border-gray-600 bg-gray-900 text-white shadow-black/30"
+                                            ? "border-yellow-300 bg-yellow-400/90 text-black backdrop-blur-sm shadow-yellow-950/30"
+                                            : "border-gray-600 bg-gray-900/70 text-white backdrop-blur-sm shadow-black/30"
                                 }`}
                                 key={`hero-tile-${letter}`}
                             >
@@ -683,10 +683,10 @@ const Board = () => {
                             <div
                                 className={`aspect-square rounded-md border ${
                                     index % 7 === 0
-                                        ? "border-green-500 bg-green-600/80"
+                                        ? "border-green-500 bg-green-600/80 backdrop-blur-sm"
                                         : index % 5 === 0
-                                            ? "border-yellow-400 bg-yellow-500/80"
-                                            : "border-gray-700 bg-gray-950"
+                                            ? "border-yellow-400 bg-yellow-500/80 backdrop-blur-sm"
+                                            : "border-gray-700 bg-gray-950/70 backdrop-blur-sm"
                                 }`}
                                 key={`hero-empty-tile-${index}`}
                             />
