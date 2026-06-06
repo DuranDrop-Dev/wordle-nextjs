@@ -8,6 +8,23 @@ interface EmailFormProps {
     isChecked: boolean;
     onAccountMessage: (message: string | null) => void;
 }
+
+const EmailIcon = () => (
+    <svg
+        aria-hidden="true"
+        className="h-5 w-5 flex-none"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2.2"
+        viewBox="0 0 24 24"
+    >
+        <rect height="16" rx="2" width="20" x="2" y="4" />
+        <path d="m22 7-8.97 5.7a2 2 0 0 1-2.06 0L2 7" />
+    </svg>
+);
+
 const EmailForm = ({ isChecked, onAccountMessage }: EmailFormProps) => {
     // Firebase method
     const auth = getAuth();
@@ -100,9 +117,10 @@ const EmailForm = ({ isChecked, onAccountMessage }: EmailFormProps) => {
                 <>
                     <h3 className='text-sm font-bold uppercase tracking-[0.24em] text-green-300'>Email</h3>
                     <button
-                        className="rounded-md border border-white bg-white px-7 py-3 text-base font-black text-black transition-all ease-in-out hover:-translate-y-0.5 hover:bg-black hover:text-white disabled:opacity-30 disabled:hover:translate-y-0 disabled:hover:bg-white disabled:hover:text-black"
+                        className="inline-flex items-center justify-center gap-3 rounded-md border border-white bg-white px-7 py-3 text-base font-black text-black transition-all ease-in-out hover:-translate-y-0.5 hover:bg-black hover:text-white disabled:opacity-30 disabled:hover:translate-y-0 disabled:hover:bg-white disabled:hover:text-black"
                         disabled={!isChecked}
                         onClick={showEmailForms}>
+                        <EmailIcon />
                         Continue with Email
                     </button>
                 </>

@@ -11,6 +11,31 @@ import Image from "next/image";
 import placeholder from "@icons/profilePlaceholder.svg";
 import EmailForm from "../components/EmailForm";
 
+const GoogleIcon = () => (
+    <svg
+        aria-hidden="true"
+        className="h-5 w-5 flex-none"
+        viewBox="0 0 24 24"
+    >
+        <path
+            d="M21.6 12.23c0-.75-.07-1.47-.19-2.16H12v4.09h5.38a4.6 4.6 0 0 1-2 3.02v2.51h3.24c1.9-1.75 2.98-4.33 2.98-7.46Z"
+            fill="#4285F4"
+        />
+        <path
+            d="M12 22c2.7 0 4.97-.89 6.62-2.41l-3.24-2.51c-.9.6-2.05.95-3.38.95-2.6 0-4.8-1.76-5.59-4.12H3.06v2.59A10 10 0 0 0 12 22Z"
+            fill="#34A853"
+        />
+        <path
+            d="M6.41 13.91A6.02 6.02 0 0 1 6.09 12c0-.66.11-1.3.32-1.91V7.5H3.06A10 10 0 0 0 2 12c0 1.61.39 3.13 1.06 4.5l3.35-2.59Z"
+            fill="#FBBC05"
+        />
+        <path
+            d="M12 5.97c1.47 0 2.79.51 3.83 1.5l2.87-2.87C16.96 2.98 14.7 2 12 2a10 10 0 0 0-8.94 5.5l3.35 2.59C7.2 7.73 9.4 5.97 12 5.97Z"
+            fill="#EA4335"
+        />
+    </svg>
+);
+
 const LoginBox = () => {
     const [isChecked, setIsChecked] = useState(false);
     const [initialRender, setInitialRender] = useState(true);
@@ -167,11 +192,12 @@ const LoginBox = () => {
                 <div className="flex flex-col items-center gap-4 border-t border-gray-800 pt-6">
                     <h3 className="text-sm font-bold uppercase tracking-[0.24em] text-green-300">Google</h3>
                     <button
-                        className="rounded-md border border-green-300 bg-green-400 px-7 py-3 text-base font-black text-black shadow-[0_10px_30px_rgba(74,222,128,0.18)] transition-all ease-in-out hover:-translate-y-0.5 hover:bg-white disabled:opacity-30 disabled:hover:translate-y-0 disabled:hover:bg-green-400"
+                        className="inline-flex items-center justify-center gap-3 rounded-md border border-green-300 bg-green-400 px-7 py-3 text-base font-black text-black shadow-[0_10px_30px_rgba(74,222,128,0.18)] transition-all ease-in-out hover:-translate-y-0.5 hover:bg-white disabled:opacity-30 disabled:hover:translate-y-0 disabled:hover:bg-green-400"
                         disabled={!isChecked}
                         id="loginBtn"
                         onClick={GoogleLogin}
                     >
+                        <GoogleIcon />
                         Continue with Google
                     </button>
                 </div>
